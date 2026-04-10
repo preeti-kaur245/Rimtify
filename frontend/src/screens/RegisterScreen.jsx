@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { useAuth } from '../AuthContext';
 import { useToast } from '../ToastContext';
+import logoImg from '../assets/logo.jpeg';
 import './AuthScreens.css';
-
-import myLogo from '../assets/logo.jpeg';
 
 const DEPT_OPTIONS = ['Computer Science & Engineering', 'Electronics & Communication', 'Mechanical Engineering', 'Civil Engineering', 'Mathematics', 'Physics', 'Chemistry', 'Commerce', 'Management', 'Law', 'Other'];
 
@@ -57,7 +56,7 @@ export default function RegisterScreen({ onSwitch }) {
       <div className="auth-box auth-box-wide fade-up">
         <div className="auth-brand">
           <div className="auth-logo">
-            <img src={myLogo} alt="Logo" style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'contain' }} />
+            <img src={logoImg} alt="Brand" className="auth-logo-img" />
           </div>
           <div>
             <div className="auth-brand-name">Faculty Portal</div>

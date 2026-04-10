@@ -38,6 +38,10 @@
   border-radius: 12px; border: 1px solid rgba(100,160,255,.25);
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 0 20px rgba(26,111,255,.3);
+  overflow: hidden;
+}
+.auth-logo-img {
+  width: 100%; height: 100%; object-fit: cover;
 }
 .auth-brand-name { font-size: 20px; font-weight: 800; background: linear-gradient(135deg,#fff,#00d4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .auth-brand-sub { font-size: 11px; color: var(--text3); font-weight: 500; }

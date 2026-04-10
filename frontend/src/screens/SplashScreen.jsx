@@ -1,11 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import logoImg from '../assets/logo.jpeg';
 import './SplashScreen.css';
-
-import myLogo from '../assets/logo.jpeg';
-
-const RimtifyLogo = ({ size = 90 }) => (
-  <img src={myLogo} alt="Logo" style={{ width: size, height: size, borderRadius: '50%', objectFit: 'contain' }} />
-);
 
 const MESSAGES = ['Initializing...', 'Loading portal...', 'Syncing data...', 'Almost ready...', 'Welcome!'];
 
@@ -45,7 +40,7 @@ export default function SplashScreen({ onDone }) {
       <div className="splash-particles" id="spl-parts" />
       <div className="splash-content">
         <div className="splash-logo-box">
-          <RimtifyLogo size={90} />
+          <img src={logoImg} alt="Brand Logo" className="splash-logo-img" />
         </div>
         <div className="splash-title">Rimtify</div>
         <div className="splash-sub">RIMT University</div>

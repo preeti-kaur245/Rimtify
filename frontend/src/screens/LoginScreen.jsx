@@ -1,13 +1,8 @@
 import { useState } from 'react';
 import { useAuth } from '../AuthContext';
 import { useToast } from '../ToastContext';
+import logoImg from '../assets/logo.jpeg';
 import './AuthScreens.css';
-
-import myLogo from '../assets/logo.jpeg';
-
-const RimtifyMark = () => (
-  <img src={myLogo} alt="Logo" style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'contain' }} />
-);
 
 export default function LoginScreen({ onSwitch }) {
   const { login } = useAuth();
@@ -49,7 +44,7 @@ export default function LoginScreen({ onSwitch }) {
 
       <div className="auth-box fade-up">
         <div className="auth-brand">
-          <div className="auth-logo"><RimtifyMark /></div>
+          <div className="auth-logo"><img src={logoImg} alt="Brand" className="auth-logo-img" /></div>
           <div>
             <div className="auth-brand-name">Faculty Portal</div>
             <div className="auth-brand-sub">Academic Management</div>
