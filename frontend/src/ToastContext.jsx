@@ -15,12 +15,14 @@ export function ToastProvider({ children }) {
     setToasts(prev => [...prev, { id, msg, type }]);
     
     if ('Notification' in window && Notification.permission === 'granted' && (type === 'success' || type === 'error')) {
-      new Notification(type === 'success' ? '✅ Success' : '❌ Error', {
-        body: msg.replace(/^[^\w]+/, '').trim()
+      const n = new Notification(type === 'success' ? '✅ Success' : '❌ Error', {
+        body: msg.replace(/^[^\w]+/, '').trim(),
+        silent: true
       });
+      setTimeout(() => n.close(), 1500);
     }
 
-    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 2800);
+    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 1500);
   }, []);
 
   return (
