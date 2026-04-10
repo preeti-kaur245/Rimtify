@@ -1,0 +1,45 @@
+.materials-screen { max-width: 900px; }
+
+.screen-header {
+  display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px;
+  flex-wrap: wrap; gap: 12px;
+}
+.screen-header h1 { font-size: clamp(20px, 3vw, 26px); font-weight: 800; margin-bottom: 3px; }
+.screen-header p { font-size: 13px; color: var(--text2); }
+
+.mat-controls { display: flex; gap: 12px; flex-direction: column; margin-bottom: 16px; }
+
+.search-bar {
+  display: flex; align-items: center; gap: 9px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 11px; padding: 10px 14px;
+}
+.search-bar span { font-size: 16px; flex-shrink: 0; }
+.search-input { flex: 1; background: none; border: none; outline: none; color: var(--text); font-size: 14px; font-family: 'Outfit', sans-serif; }
+.search-input::placeholder { color: var(--text3); }
+
+.filter-pills { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+.filter-pills::-webkit-scrollbar { display: none; }
+.filter-pill {
+  padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border);
+  background: none; color: var(--text3); font-size: 12px; font-weight: 700;
+  cursor: pointer; white-space: nowrap; transition: all 0.2s; font-family: 'Outfit', sans-serif;
+}
+.filter-pill.active { background: rgba(26,111,255,.15); border-color: rgba(26,111,255,.4); color: var(--blue2); }
+.filter-pill:hover:not(.active) { border-color: var(--border); color: var(--text2); background: var(--card); }
+
+.mat-upload-area {
+  display: flex; align-items: center; gap: 14px; padding: 16px 20px;
+  border: 2px dashed rgba(100,160,255,.22); border-radius: var(--r);
+  background: rgba(26,111,255,.02); cursor: pointer; margin-bottom: 18px;
+  transition: all 0.2s; color: var(--text2);
+}
+.mat-upload-area:hover { border-color: var(--blue); background: rgba(26,111,255,.05); color: var(--text); }
+
+.mats-list { display: flex; flex-direction: column; gap: 9px; }
+
+.empty-state {
+  text-align: center; padding: 56px 24px; color: var(--text2);
+}
+.empty-state h3 { font-size: 17px; font-weight: 700; color: var(--text); margin: 12px 0 6px; }
+.empty-state p { font-size: 13px; }

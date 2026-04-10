@@ -1,0 +1,6 @@
+﻿node_modules
+*.sqlite*
+uploads/
+.env
+test.txt
+test_upload.txt

@@ -1,0 +1,9 @@
+Tables: users, sqlite_sequence, teachers, students, attendance, notes, courses, materials
+users: id, username, password, name, role, dept, is_first_login
+attendance: id, course_id, student_id, lecture_no, status, note, date
+notes: id, teacher_id, course_id, title, body, tag, pinned, created_at
+courses: id, teacher_id, name, code, semester, room, icon, created_at
+sqlite_sequence: name, seq
+teachers: id, name, initials, email, password, role, dept, univ, tutorial_done, created_at
+students: id, course_id, name, roll, email, created_at
+materials: id, teacher_id, course_id, title, filename, original_name, file_size, file_type, views, created_at

@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>Rimtify – RIMT University Faculty Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+:root{
+  --navy:#060d1f;--navy2:#0a1628;--card:#0f1e38;--card2:#132244;
+  --blue:#1a6fff;--blue2:#2d87ff;--cyan:#00d4ff;--purple:#7c3aed;--indigo:#4f46e5;
+  --green:#10b981;--red:#ef4444;--amber:#f59e0b;
+  --text:#e8f0ff;--text2:#8da8d4;--text3:#4d6a99;
+  --border:rgba(100,160,255,0.12);--border2:rgba(100,160,255,0.06);
+  --r:18px;--r2:12px;
+}
+html,body{height:100%;overflow:hidden;background:var(--navy);font-family:'Outfit',sans-serif;color:var(--text)}
+#app{height:100%;display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:relative;overflow:hidden}
+
+/* ── SPLASH ── */
+#splash{position:absolute;inset:0;z-index:999;background:radial-gradient(ellipse at 50% 30%,#0d2050,var(--navy) 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.sbg{position:absolute;inset:0;background:radial-gradient(circle at 20% 80%,rgba(124,58,237,.15),transparent 50%),radial-gradient(circle at 80% 20%,rgba(26,111,255,.2),transparent 50%)}
+.rings{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.ring{position:absolute;border-radius:50%;border:1px solid rgba(100,160,255,.1);animation:rp 3s ease-in-out infinite}
+.ring:nth-child(1){width:200px;height:200px}.ring:nth-child(2){width:320px;height:320px;animation-delay:.5s;border-color:rgba(100,160,255,.07)}.ring:nth-child(3){width:440px;height:440px;animation-delay:1s;border-color:rgba(100,160,255,.04)}.ring:nth-child(4){width:580px;height:580px;animation-delay:1.5s;border-color:rgba(100,160,255,.02)}
+@keyframes rp{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.03)}}
+.sparticles{position:absolute;inset:0;pointer-events:none}
+.sp{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--cyan);opacity:0;animation:spf 4s ease-in-out infinite}
+@keyframes spf{0%{opacity:0;transform:translateY(20px) scale(0)}30%{opacity:1}100%{opacity:0;transform:translateY(-80px) scale(1.5)}}
+.logo-wrap{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;animation:lr 1s cubic-bezier(.34,1.56,.64,1) .3s both}
+@keyframes lr{from{opacity:0;transform:scale(.5) translateY(30px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.logo-box{width:140px;height:140px;background:linear-gradient(145deg,#0d2050,#0a1628);border-radius:32px;border:1.5px solid rgba(100,160,255,.25);display:flex;align-items:center;justify-content:center;box-shadow:0 0 60px rgba(26,111,255,.3),0 0 120px rgba(0,212,255,.1),inset 0 1px 0 rgba(255,255,255,.08);animation:lp 2.5s ease-in-out infinite 1.3s}
+@keyframes lp{0%,100%{box-shadow:0 0 60px rgba(26,111,255,.3),0 0 120px rgba(0,212,255,.1),inset 0 1px 0 rgba(255,255,255,.08)}50%{box-shadow:0 0 80px rgba(26,111,255,.5),0 0 160px rgba(0,212,255,.2),inset 0 1px 0 rgba(255,255,255,.08)}}
+.splash-title{margin-top:24px;font-size:42px;font-weight:900;letter-spacing:-1px;background:linear-gradient(135deg,#fff,var(--cyan) 50%,var(--blue2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:tr .8s ease .8s both}
+.splash-sub{margin-top:6px;font-size:12px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--text2);animation:tr .8s ease 1s both}
+.splash-tagline{margin-top:5px;font-size:12px;color:var(--text3);animation:tr .8s ease 1.1s both}
+@keyframes tr{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+.sbar-wrap{margin-top:40px;width:200px;animation:tr .8s ease 1.3s both}
+.sbar-bg{height:3px;background:rgba(100,160,255,.15);border-radius:10px;overflow:hidden}
+.sbar-fill{height:100%;width:0%;border-radius:10px;background:linear-gradient(90deg,var(--blue),var(--cyan));animation:bf 2.5s ease 1.5s forwards}
+@keyframes bf{to{width:100%}}
+.splash-pct{margin-top:8px;text-align:center;font-size:12px;color:var(--text3)}
+.splash-out{animation:so .6s ease forwards}
+@keyframes so{to{opacity:0;transform:scale(1.05);pointer-events:none}}
+
+/* ── LOGO SVG SHARED ── */
+.logo-svg{width:90px;height:90px}
+.hlogo-svg{width:22px;height:22px}
+
+/* ── HEADER ── */
+.header{padding:12px 16px 0;background:rgba(6,13,31,.98);border-bottom:1px solid var(--border);flex-shrink:0;position:relative;z-index:50;backdrop-filter:blur(20px)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.hlogo{display:flex;align-items:center;gap:9px}
+.hlogo-box{width:34px;height:34px;background:linear-gradient(145deg,#0d2050,#0a1628);border-radius:9px;border:1px solid rgba(100,160,255,.25);display:flex;align-items:center;justify-content:center;box-shadow:0 0 16px rgba(26,111,255,.3)}
+.hlogo-name{font-size:19px;font-weight:800;background:linear-gradient(135deg,#fff,var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hactions{display:flex;gap:8px;align-items:center}
+.hbtn{width:34px;height:34px;border-radius:9px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);font-size:16px;position:relative;transition:all .2s}
+.ndot{position:absolute;top:6px;right:6px;width:7px;height:7px;background:var(--cyan);border-radius:50%;border:1.5px solid var(--navy)}
+.uav{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer;border:2px solid rgba(100,160,255,.3)}
+
+/* ── NAV TABS ── */
+.ntabs{display:flex;padding:0 2px;overflow-x:auto;scrollbar-width:none}
+.ntabs::-webkit-scrollbar{display:none}
+.ntab{display:flex;align-items:center;gap:5px;padding:8px 12px;font-size:11.5px;font-weight:600;color:var(--text3);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s;letter-spacing:.3px}
+.ntab.active{color:var(--cyan);border-bottom-color:var(--cyan)}
+.ntab svg{width:13px;height:13px}
+
+/* ── CONTENT ── */
+.content{flex:1;overflow-y:auto;overflow-x:hidden;padding:14px 14px 88px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.content::-webkit-scrollbar{width:3px}
+.content::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px}
+
+/* ── BOTTOM NAV ── */
+.bnav{flex-shrink:0;display:flex;background:rgba(6,13,31,.97);border-top:1px solid var(--border);padding:6px 0 10px;z-index:50}
+.bni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:3px 0;transition:all .2s}
+.bni-icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;transition:all .3s;color:var(--text3)}
+.bni.active .bni-icon{background:linear-gradient(135deg,rgba(26,111,255,.2),rgba(0,212,255,.1));color:var(--cyan);border:1px solid rgba(0,212,255,.2);box-shadow:0 0 16px rgba(0,212,255,.15)}
+.bni-lbl{font-size:10px;font-weight:600;color:var(--text3);transition:color .2s}
+.bni.active .bni-lbl{color:var(--cyan)}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:15px;margin-bottom:11px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(100,160,255,.03),transparent 60%);pointer-events:none}
+
+/* ── STAT GRID ── */
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:13px}
+.scard{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:13px;position:relative;overflow:hidden}
+.scard::after{content:'';position:absolute;bottom:-20px;right:-20px;width:70px;height:70px;border-radius:50%;background:radial-gradient(circle,var(--ac) 0%,transparent 70%);opacity:.15}
+.scard.bl{--ac:var(--blue)}.scard.cy{--ac:var(--cyan)}.scard.pu{--ac:var(--purple)}.scard.gr{--ac:var(--green)}
+.sicon{font-size:20px;margin-bottom:6px}.sval{font-size:24px;font-weight:800;line-height:1}.slbl{font-size:10px;color:var(--text2);margin-top:2px;font-weight:500}
+.sbadge{position:absolute;top:9px;right:9px;font-size:9px;font-weight:700;padding:2px 6px;border-radius:20px}
+.bup{background:rgba(16,185,129,.15);color:#10b981}
+
+/* ── WELCOME ── */
+.whero{background:linear-gradient(135deg,#0d2050,#0a1628 50%,rgba(124,58,237,.2));border:1px solid rgba(100,160,255,.2);border-radius:var(--r);padding:18px;margin-bottom:13px;position:relative;overflow:hidden}
+.whero::before{content:'';position:absolute;top:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,255,.15),transparent 70%)}
+.wgreet{font-size:12px;color:var(--text2);margin-bottom:3px}
+.wname{font-size:20px;font-weight:800;line-height:1.2}
+.wrole{display:inline-flex;align-items:center;gap:5px;margin-top:6px;padding:3px 10px;border-radius:20px;background:rgba(26,111,255,.15);border:1px solid rgba(26,111,255,.3);font-size:11px;font-weight:600;color:var(--blue2)}
+.wdate{margin-top:10px;font-size:11px;color:var(--text3)}
+
+/* ── QUICK ACTIONS ── */
+.qgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:13px}
+.qbtn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:11px 4px;background:var(--card);border:1px solid var(--border);border-radius:13px;cursor:pointer;transition:all .2s}
+.qbtn:active{transform:scale(.95)}
+.qicon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.qlbl{font-size:9.5px;font-weight:600;color:var(--text2);text-align:center;line-height:1.2}
+.qbl .qicon{background:rgba(26,111,255,.15);color:#60a5fa}
+.qcy .qicon{background:rgba(0,212,255,.1);color:var(--cyan)}
+.qpu .qicon{background:rgba(124,58,237,.15);color:#c084fc}
+.qgr .qicon{background:rgba(16,185,129,.15);color:#34d399}
+
+/* ── SEC HEADER ── */
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+.st{font-size:15px;font-weight:800}
+.sa{font-size:12px;color:var(--blue2);font-weight:600;cursor:pointer}
+
+/* ── PILLS ── */
+.pills{display:flex;gap:7px;margin-bottom:13px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.pills::-webkit-scrollbar{display:none}
+.pill{padding:5px 13px;border-radius:20px;border:1px solid var(--border);font-size:11.5px;font-weight:600;color:var(--text3);cursor:pointer;white-space:nowrap;transition:all .2s}
+.pill.active{background:rgba(26,111,255,.15);border-color:rgba(26,111,255,.4);color:var(--blue2)}
+
+/* ── SEARCH ── */
+.sbar{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:11px;padding:9px 13px;margin-bottom:13px}
+.sbar svg{width:15px;height:15px;color:var(--text3);flex-shrink:0}
+.sinp{flex:1;background:transparent;border:none;outline:none;font-size:13px;color:var(--text);font-family:'Outfit',sans-serif}
+.sinp::placeholder{color:var(--text3)}
+
+/* ── MODALS ── */
+.movl{position:absolute;inset:0;z-index:500;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s}
+.movl.open{opacity:1;pointer-events:all}
+.msheet{width:100%;background:var(--card);border-radius:22px 22px 0 0;border:1px solid var(--border);border-bottom:none;padding:18px 18px 28px;transform:translateY(100%);transition:transform .4s cubic-bezier(.34,1.2,.64,1);max-height:90vh;overflow-y:auto}
+.movl.open .msheet{transform:translateY(0)}
+.mhandle{width:38px;height:4px;border-radius:10px;background:var(--border);margin:0 auto 16px}
+.mtitle{font-size:17px;font-weight:800;margin-bottom:15px}
+.ifield{width:100%;background:rgba(100,160,255,.06);border:1px solid var(--border);border-radius:11px;padding:11px 13px;font-size:13px;color:var(--text);font-family:'Outfit',sans-serif;outline:none;margin-bottom:9px}
+.ifield:focus{border-color:rgba(26,111,255,.4)}
+.ifield::placeholder{color:var(--text3)}
+.btn-p{width:100%;padding:13px;border-radius:11px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--blue),var(--indigo));font-size:14px;font-weight:700;color:#fff;font-family:'Outfit',sans-serif;box-shadow:0 5px 18px rgba(26,111,255,.35);transition:all .2s}
+.btn-p:active{transform:scale(.98)}
+.btn-s{width:100%;padding:11px;border-radius:11px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:13px;font-weight:600;color:var(--text2);font-family:'Outfit',sans-serif;margin-top:7px}
+.btn-d{width:100%;padding:11px;border-radius:11px;border:1px solid rgba(239,68,68,.3);background:rgba(239,68,68,.08);cursor:pointer;font-size:13px;font-weight:600;color:#ef4444;font-family:'Outfit',sans-serif;margin-top:7px}
+
+/* ── FULL-SCREEN PANELS ── */
+.fsp{position:absolute;inset:0;z-index:200;background:var(--navy);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .35s cubic-bezier(.34,1.2,.64,1)}
+.fsp.open{transform:translateX(0)}
+.fsp-header{padding:12px 14px;background:rgba(6,13,31,.98);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:11px;flex-shrink:0;backdrop-filter:blur(20px)}
+.backbtn{width:34px;height:34px;border-radius:9px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;color:var(--text2);flex-shrink:0}
+.fsp-body{flex:1;overflow-y:auto;padding:14px 14px 80px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.fsp-body::-webkit-scrollbar{width:3px}
+.fsp-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px}
+
+/* ── COURSE CARD ── */
+.ccard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:15px;margin-bottom:10px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.ccard::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(100,160,255,.03),transparent 60%);pointer-events:none}
+.ccard:active{transform:scale(.98)}
+.cc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.cc-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.cc-name{font-size:15px;font-weight:800;margin-bottom:2px;line-height:1.2}
+.cc-code{font-size:11px;color:var(--text2)}
+.cc-pct{font-size:22px;font-weight:800;background:linear-gradient(135deg,var(--cyan),var(--blue2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.cc-bar-bg{height:3px;background:rgba(100,160,255,.1);border-radius:10px;overflow:hidden;margin-bottom:9px}
+.cc-bar-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:width .8s ease}
+.cc-meta{display:flex;gap:10px}
+.cc-chip{font-size:10px;color:var(--text3);display:flex;align-items:center;gap:4px}
+.g-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block}
+.r-dot{width:6px;height:6px;border-radius:50%;background:var(--red);display:inline-block}
+.cc-actions{display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border2)}
+.cc-act-btn{flex:1;padding:8px;border-radius:9px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:11px;font-weight:600;color:var(--text2);font-family:'Outfit',sans-serif;transition:all .2s;text-align:center}
+.cc-act-btn:hover{background:var(--card2);color:var(--text)}
+.cc-act-btn.primary{background:linear-gradient(135deg,rgba(26,111,255,.2),rgba(0,212,255,.1));border-color:rgba(26,111,255,.3);color:var(--blue2)}
+
+/* ── TODO ATTENDANCE ── */
+.att-note-box{background:rgba(255,200,0,.06);border:1px solid rgba(255,200,0,.15);border-radius:11px;padding:11px 13px;margin-bottom:12px;display:flex;gap:9px;align-items:flex-start}
+.att-note-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.att-note-input{flex:1;background:transparent;border:none;outline:none;font-size:12.5px;color:var(--text2);font-family:'Outfit',sans-serif;line-height:1.5;resize:none;min-height:36px}
+.att-note-input::placeholder{color:var(--text3)}
+
+.lec-bar{display:flex;gap:6px;margin-bottom:13px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.lec-bar::-webkit-scrollbar{display:none}
+.lec-btn{min-width:40px;height:40px;border-radius:10px;border:1px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;font-weight:700;color:var(--text3);transition:all .2s;flex-shrink:0}
+.lec-btn.active{background:linear-gradient(135deg,var(--blue),var(--indigo));color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(26,111,255,.35)}
+
+.att-summary-row{display:flex;gap:8px;margin-bottom:12px}
+.att-chip{flex:1;padding:9px 6px;border-radius:10px;text-align:center}
+.att-chip.p{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2)}.att-chip.a{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2)}.att-chip.n{background:rgba(100,160,255,.08);border:1px solid rgba(100,160,255,.12)}
+.ach-num{font-size:20px;font-weight:800}.ach-num.p{color:var(--green)}.ach-num.a{color:var(--red)}.ach-num.n{color:var(--text3)}
+.ach-lbl{font-size:9px;font-weight:600;color:var(--text3);margin-top:2px}
+
+/* ── TODO STUDENT ROW ── */
+.stu-todo-row{
+  display:flex;align-items:center;gap:11px;
+  padding:11px 13px;border-radius:12px;margin-bottom:7px;
+  border:1.5px solid var(--border2);
+  background:var(--card);
+  transition:all .25s;cursor:pointer;
+  position:relative;overflow:hidden;
+}
+.stu-todo-row.present{border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.07)}
+.stu-todo-row.absent{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.07)}
+.stu-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;transition:all .25s}
+.stu-todo-row.present .stu-av{background:linear-gradient(135deg,#059669,#10b981)}
+.stu-todo-row.absent .stu-av{background:linear-gradient(135deg,#b91c1c,#ef4444)}
+.stu-info{flex:1}
+.stu-name{font-size:13px;font-weight:700;line-height:1.2}
+.stu-roll{font-size:10px;color:var(--text3)}
+.stu-status-badge{
+  padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;
+  transition:all .25s;
+}
+.stu-todo-row.none .stu-status-badge{background:rgba(100,160,255,.1);color:var(--text3);border:1px solid var(--border)}
+.stu-todo-row.present .stu-status-badge{background:rgba(16,185,129,.2);color:#34d399;border:1px solid rgba(16,185,129,.3)}
+.stu-todo-row.absent .stu-status-badge{background:rgba(239,68,68,.2);color:#f87171;border:1px solid rgba(239,68,68,.3)}
+.tap-hint{font-size:9px;color:var(--text3);text-align:center;margin-bottom:10px;letter-spacing:.3px}
+
+/* ── STUDENT MANAGE ── */
+.stu-manage-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border2)}
+.stu-m-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.stu-m-info{flex:1}
+.stu-m-name{font-size:13px;font-weight:600}
+.stu-m-roll{font-size:10px;color:var(--text3)}
+.stu-m-actions{display:flex;gap:6px}
+.stu-edit-btn{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:transparent;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;transition:all .2s}
+.stu-edit-btn:active{transform:scale(.9)}
+
+/* ── NOTES SECTION ── */
+.note-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:13px;margin-bottom:9px;cursor:pointer}
+.ntitle{font-size:13px;font-weight:700;margin-bottom:3px}
+.npreview{font-size:11.5px;color:var(--text2);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nfoot{display:flex;align-items:center;justify-content:space-between;margin-top:9px}
+.nchip{padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;background:rgba(26,111,255,.15);color:var(--blue2);border:1px solid rgba(26,111,255,.2)}
+.ndate{font-size:10px;color:var(--text3)}
+
+/* ── MATERIAL CARD ── */
+.mcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:13px;margin-bottom:9px;display:flex;align-items:center;gap:11px;cursor:pointer;transition:all .2s}
+.mcard:active{transform:scale(.98)}
+.micon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.mpdf{background:rgba(239,68,68,.15)}.mppt{background:rgba(245,158,11,.15)}.mdoc{background:rgba(26,111,255,.15)}.mvid{background:rgba(124,58,237,.15)}
+.minfo{flex:1}.mtitle{font-size:12.5px;font-weight:600;margin-bottom:2px}.mmeta{font-size:10.5px;color:var(--text3)}
+.msize{font-size:10px;color:var(--text3)}
+.upload-area{display:flex;align-items:center;justify-content:center;gap:9px;padding:15px;border-radius:var(--r);border:2px dashed rgba(100,160,255,.22);background:rgba(26,111,255,.03);cursor:pointer;margin-bottom:13px;font-size:13px;font-weight:600;color:var(--text2);transition:all .2s}
+.upload-area:hover{border-color:var(--blue);background:rgba(26,111,255,.07);color:var(--text)}
+
+/* ── CHAT ── */
+.cli{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--border2);cursor:pointer;transition:all .15s}
+.cli:active{opacity:.7}
+.clav-wrap{position:relative;flex-shrink:0}
+.clav{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700}
+.clav.grp{background:linear-gradient(135deg,var(--indigo),#9b59ff);font-size:19px}
+.ondot{position:absolute;bottom:1px;right:1px;width:9px;height:9px;border-radius:50%;background:var(--green);border:2px solid var(--navy)}
+.clinfo{flex:1;min-width:0}
+.clname{font-size:13.5px;font-weight:600;margin-bottom:2px;display:flex;align-items:center;gap:5px}
+.cllast{font-size:11.5px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.clmeta{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
+.cltime{font-size:10px;color:var(--text3)}
+.clunread{background:var(--cyan);color:var(--navy);border-radius:20px;padding:1px 6px;font-size:10px;font-weight:800}
+.grp-badge{font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;background:rgba(124,58,237,.2);color:#c084fc;border:1px solid rgba(124,58,237,.3)}
+
+/* ── CHAT WINDOW ── */
+.chat-win{position:absolute;inset:0;z-index:300;background:var(--navy);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .35s cubic-bezier(.34,1.2,.64,1)}
+.chat-win.open{transform:translateX(0)}
+.cw-header{padding:12px 14px;background:rgba(6,13,31,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:11px;flex-shrink:0}
+.cw-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.cw-av.grp{background:linear-gradient(135deg,var(--indigo),#9b59ff)}
+.cw-name{font-size:14px;font-weight:700}
+.cw-sub{font-size:10.5px;color:var(--text3)}
+.cmsgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:9px;scrollbar-width:none}
+.cmsgs::-webkit-scrollbar{display:none}
+.mrow{display:flex;gap:7px;align-items:flex-end}
+.mrow.me{flex-direction:row-reverse}
+.mav{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.mbubble{max-width:72%;padding:9px 12px;border-radius:15px;background:var(--card2);font-size:12.5px;line-height:1.5;border:1px solid var(--border)}
+.mrow.me .mbubble{background:linear-gradient(135deg,rgba(26,111,255,.25),rgba(0,212,255,.15));border-color:rgba(0,212,255,.2)}
+.mtime{font-size:10px;color:var(--text3);margin-top:3px}
+.mrow.me .mtime{text-align:right}
+.msender{font-size:9px;font-weight:700;color:var(--cyan);margin-bottom:2px}
+.mfile{display:flex;align-items:center;gap:7px;background:rgba(26,111,255,.1);border:1px solid rgba(26,111,255,.2);border-radius:9px;padding:7px 9px;margin-top:5px;font-size:11px;color:var(--blue2)}
+.cinput-bar{padding:9px 13px 13px;background:rgba(6,13,31,.97);border-top:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;gap:7px}
+.cinput-wrap{flex:1;display:flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:7px 13px}
+.cinput{flex:1;background:transparent;border:none;outline:none;font-size:12.5px;color:var(--text);font-family:'Outfit',sans-serif}
+.cinput::placeholder{color:var(--text3)}
+.csend{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;flex-shrink:0;box-shadow:0 4px 14px rgba(26,111,255,.4);transition:transform .15s}
+.csend:active{transform:scale(.9)}
+.cdatediv{text-align:center;font-size:10.5px;color:var(--text3);padding:3px 0}
+
+/* ── PROFILE PAGE ── */
+.prof-hero{background:linear-gradient(135deg,#0d2050,rgba(124,58,237,.2));border:1px solid rgba(100,160,255,.2);border-radius:var(--r);padding:18px;margin-bottom:13px;text-align:center}
+.prof-av{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;margin:0 auto 10px;border:3px solid rgba(100,160,255,.3);box-shadow:0 0 28px rgba(26,111,255,.3)}
+.prof-name{font-size:19px;font-weight:800}
+.prof-dept{font-size:11px;color:var(--text2);margin-top:3px}
+.prof-stats{display:flex;justify-content:center;gap:20px;margin-top:10px}
+.pstat{text-align:center}
+.pstat-val{font-size:17px;font-weight:800}
+.pstat-lbl{font-size:9px;color:var(--text3)}
+.pmenu-item{display:flex;align-items:center;gap:11px;padding:13px 15px;background:var(--card);border:1px solid var(--border);border-radius:11px;margin-bottom:7px;cursor:pointer;transition:all .2s}
+.pmi-icon{font-size:17px;width:28px;text-align:center}
+.pmi-lbl{flex:1;font-size:13.5px;font-weight:600}
+.pmi-arr{color:var(--text3);font-size:13px}
+
+/* ── ANIM ── */
+.fiu{animation:fiu .35s ease both}
+@keyframes fiu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.stag>*{animation:fiu .35s ease both}
+.stag>*:nth-child(1){animation-delay:.04s}.stag>*:nth-child(2){animation-delay:.08s}.stag>*:nth-child(3){animation-delay:.12s}.stag>*:nth-child(4){animation-delay:.16s}.stag>*:nth-child(5){animation-delay:.2s}.stag>*:nth-child(6){animation-delay:.24s}
+
+.page{display:none}
+.page.active{display:block}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:var(--border2);margin:10px 0}
+.sect-lbl{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:9px}
+
+/* ── LECTURE HISTORY ── */
+.lh-row{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:7px;font-size:12px}
+.lh-lec{font-weight:700;color:var(--blue2)}
+.lh-stats{display:flex;gap:10px}
+.lh-p{color:var(--green)}.lh-a{color:var(--red)}
+.lh-date{font-size:10px;color:var(--text3)}
+
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="sbg"></div>
+  <div class="rings"><div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div></div>
+  <div class="sparticles" id="sparts"></div>
+  <div class="logo-wrap">
+    <div class="logo-box">
+      <svg class="logo-svg" viewBox="0 0 90 90" fill="none">
+        <ellipse cx="45" cy="28" rx="28" ry="7" fill="url(#lc1)" opacity=".9"/>
+        <polygon points="17,28 45,18 73,28 45,38" fill="url(#lc2)"/>
+        <rect x="43" y="28" width="4" height="18" rx="2" fill="url(#lc3)"/>
+        <ellipse cx="45" cy="46" rx="5" ry="3" fill="url(#lc4)"/>
+        <path d="M14 52 Q14 46 20 46 Q32 44 45 50 Q58 44 70 46 Q76 46 76 52 L76 72 Q70 68 58 70 Q51 71 45 73 Q39 71 32 70 Q20 68 14 72 Z" fill="url(#lc5)" opacity=".85"/>
+        <line x1="45" y1="50" x2="45" y2="73" stroke="rgba(100,160,255,.4)" stroke-width="1.5"/>
+        <circle cx="35" cy="60" r="2.5" fill="url(#ld1)"/><circle cx="45" cy="56" r="2" fill="url(#ld2)"/><circle cx="55" cy="60" r="2.5" fill="url(#ld1)"/>
+        <circle cx="40" cy="65" r="2" fill="url(#ld2)"/><circle cx="50" cy="65" r="2" fill="url(#ld2)"/>
+        <line x1="35" y1="60" x2="45" y2="56" stroke="rgba(0,212,255,.4)" stroke-width="1"/>
+        <line x1="45" y1="56" x2="55" y2="60" stroke="rgba(0,212,255,.4)" stroke-width="1"/>
+        <line x1="35" y1="60" x2="40" y2="65" stroke="rgba(0,212,255,.3)" stroke-width="1"/>
+        <line x1="55" y1="60" x2="50" y2="65" stroke="rgba(0,212,255,.3)" stroke-width="1"/>
+        <path d="M54 44 L72 30 L68 38 M72 30 L64 34" stroke="url(#la1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <ellipse cx="45" cy="61" rx="30" ry="8" stroke="url(#lr1)" stroke-width="1.5" fill="none" opacity=".5"/>
+        <defs>
+          <linearGradient id="lc1" x1="0" y1="0" x2="1"><stop stop-color="#60a5fa"/><stop offset="1" stop-color="#818cf8"/></linearGradient>
+          <linearGradient id="lc2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#6366f1"/></linearGradient>
+          <linearGradient id="lc3" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#818cf8"/><stop offset="1" stop-color="#4f46e5"/></linearGradient>
+          <linearGradient id="lc4" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#00d4ff"/><stop offset="1" stop-color="#3b82f6"/></linearGradient>
+          <linearGradient id="lc5" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#1a3a6e"/><stop offset="1" stop-color="#0f2044"/></linearGradient>
+          <radialGradient id="ld1"><stop stop-color="#00d4ff"/><stop offset="1" stop-color="#3b82f6"/></radialGradient>
+          <radialGradient id="ld2"><stop stop-color="#818cf8"/><stop offset="1" stop-color="#4f46e5"/></radialGradient>
+          <linearGradient id="la1" x1="0" y1="0" x2="1"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#00d4ff"/></linearGradient>
+          <linearGradient id="lr1" x1="0" y1="0" x2="1"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#00d4ff"/></linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <div class="splash-title">Rimtify</div>
+    <div class="splash-sub">RIMT University</div>
+    <div class="splash-tagline">Faculty Portal · Attendance · Materials · Chat</div>
+    <div class="sbar-wrap"><div class="sbar-bg"><div class="sbar-fill"></div></div><div class="splash-pct" id="sptxt">Initializing...</div></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main" style="display:none;height:100%;flex-direction:column">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <div class="hlogo">
+        <div class="hlogo-box">
+          <svg class="hlogo-svg" viewBox="0 0 40 40" fill="none">
+            <ellipse cx="20" cy="13" rx="13" ry="4" fill="url(#hc1)" opacity=".9"/>
+            <polygon points="7,13 20,8 33,13 20,18" fill="url(#hc2)"/>
+            <path d="M6 20 Q6 17 9 17 Q14 16 20 19 Q26 16 31 17 Q34 17 34 20 L34 30 Q31 28 26 29 Q23 30 20 31 Q17 30 14 29 Q9 28 6 30 Z" fill="url(#hc3)" opacity=".85"/>
+            <line x1="20" y1="19" x2="20" y2="31" stroke="rgba(100,160,255,.4)" stroke-width="1"/>
+            <circle cx="15" cy="24" r="1.5" fill="#00d4ff"/><circle cx="20" cy="22" r="1.5" fill="#818cf8"/><circle cx="25" cy="24" r="1.5" fill="#00d4ff"/>
+            <line x1="15" y1="24" x2="20" y2="22" stroke="rgba(0,212,255,.5)" stroke-width=".8"/>
+            <line x1="20" y1="22" x2="25" y2="24" stroke="rgba(0,212,255,.5)" stroke-width=".8"/>
+            <path d="M24 14 L32 8 L30 13 M32 8 L27 11" stroke="url(#ha1)" stroke-width="1.5" stroke-linecap="round"/>
+            <defs>
+              <linearGradient id="hc1" x1="0" y1="0" x2="1"><stop stop-color="#60a5fa"/><stop offset="1" stop-color="#818cf8"/></linearGradient>
+              <linearGradient id="hc2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#6366f1"/></linearGradient>
+              <linearGradient id="hc3" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#1a3a6e"/><stop offset="1" stop-color="#0f2044"/></linearGradient>
+              <linearGradient id="ha1" x1="0" y1="0" x2="1"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#00d4ff"/></linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="hlogo-name">Rimtify</div>
+      </div>
+      <div class="hactions">
+        <div class="hbtn" onclick="openM('notifM')">🔔<div class="ndot"></div></div>
+        <div class="uav" onclick="nav('profile')">PK</div>
+      </div>
+    </div>
+    <div class="ntabs" id="ntabs">
+      <div class="ntab active" data-p="dashboard" onclick="nav('dashboard')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Overview
+      </div>
+      <div class="ntab" data-p="courses" onclick="nav('courses')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Courses
+      </div>
+      <div class="ntab" data-p="materials" onclick="nav('materials')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Materials
+      </div>
+      <div class="ntab" data-p="notes" onclick="nav('notes')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Notes
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content" id="pc">
+    <!-- DASHBOARD -->
+    <div class="page active" id="pg-dashboard">
+      <div class="whero fiu">
+        <div class="wgreet" id="wgreet">Good morning 👋</div>
+        <div class="wname" id="wname">Dr. Preeti Kaur</div>
+        <div class="wrole" id="wrole">📚 Associate Professor · CSE Dept</div>
+        <div class="wdate" id="wdate">📅 Monday, March 30, 2026</div>
+      </div>
+      <div class="sgrid stag" id="dash-stats">
+        <div class="scard bl"><div class="sicon">📚</div><div class="sval" id="ds-courses">0</div><div class="slbl">My Courses</div></div>
+        <div class="scard cy"><div class="sicon">👥</div><div class="sval" id="ds-students">0</div><div class="slbl">Total Students</div></div>
+        <div class="scard pu"><div class="sicon">📋</div><div class="sval" id="ds-lectures">0</div><div class="slbl">Lectures Held</div></div>
+        <div class="scard gr"><div class="sicon">📝</div><div class="sval" id="ds-notes">0</div><div class="slbl">Notes</div></div>
+      </div>
+      <div class="sh"><div class="st">Quick Actions</div></div>
+      <div class="qgrid stag">
+        <div class="qbtn qbl" onclick="nav('courses')"><div class="qicon">📋</div><div class="qlbl">Mark Attendance</div></div>
+        <div class="qbtn qcy" onclick="nav('materials')"><div class="qicon">📤</div><div class="qlbl">Upload Material</div></div>
+        <div class="qbtn qpu" onclick="openM('noteM')"><div class="qicon">✍️</div><div class="qlbl">New Note</div></div>
+        <div class="qbtn qgr" onclick="openChatPage()"><div class="qicon">💬</div><div class="qlbl">Group Chat</div></div>
+      </div>
+      <div class="sh"><div class="st">My Courses</div><div class="sa" onclick="nav('courses')">View All →</div></div>
+      <div id="dash-courses" class="stag"></div>
+    </div>
+
+    <!-- COURSES -->
+    <div class="page" id="pg-courses">
+      <div class="sh"><div class="st">My Courses</div><div class="sa" onclick="openM('addCourseM')">+ Add Course</div></div>
+      <div id="courses-list" class="stag"></div>
+      <div id="no-courses" style="display:none;text-align:center;padding:40px 20px;color:var(--text3)">
+        <div style="font-size:48px;margin-bottom:12px">📚</div>
+        <div style="font-size:15px;font-weight:700;margin-bottom:6px">No courses yet</div>
+        <div style="font-size:12px">Tap "+ Add Course" to create your first course</div>
+      </div>
+    </div>
+
+    <!-- MATERIALS -->
+    <div class="page" id="pg-materials">
+      <div class="sh"><div class="st">Materials</div><div class="sa" onclick="openM('uploadM')">+ Upload</div></div>
+      <div class="upload-area" onclick="openM('uploadM')"><span style="font-size:20px">📤</span> Upload New Material</div>
+      <div class="pills"><div class="pill active">All</div></div>
+      <div id="mat-list" class="stag">
+        <div class="mcard"><div class="micon mpdf">📕</div><div class="minfo"><div class="mtitle">Unit 3 – Trees & Graphs.pdf</div><div class="mmeta">CS401 · Uploaded yesterday · 156 views</div></div><div class="msize">2.4 MB</div></div>
+        <div class="mcard"><div class="micon mppt">📙</div><div class="minfo"><div class="mtitle">Process Scheduling Slides.pptx</div><div class="mmeta">CS403 · Mar 28 · 98 views</div></div><div class="msize">5.1 MB</div></div>
+        <div class="mcard"><div class="micon mvid">🎬</div><div class="minfo"><div class="mtitle">Linear Regression Tutorial.mp4</div><div class="mmeta">CS501 · Mar 25 · 44 views</div></div><div class="msize">48 MB</div></div>
+        <div class="mcard"><div class="micon mdoc">📘</div><div class="minfo"><div class="mtitle">Lab Manual – OS Experiments.docx</div><div class="mmeta">CS403 · Mar 22 · 120 views</div></div><div class="msize">1.8 MB</div></div>
+      </div>
+    </div>
+
+    <!-- NOTES -->
+    <div class="page" id="pg-notes">
+      <div class="sh"><div class="st">My Notes</div><div class="sa" onclick="openM('noteM')">+ New Note</div></div>
+      <div class="sbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input class="sinp" placeholder="Search notes..." oninput="searchNotes(this.value)"/></div>
+      <div id="notes-list" class="stag"></div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="page" id="pg-profile">
+      <div class="prof-hero fiu">
+        <div class="prof-av" id="prof-av-display">PK</div>
+        <div class="prof-name" id="prof-name-display">Dr. Preeti Kaur</div>
+        <div class="prof-dept" id="prof-dept-display">Associate Professor · Computer Science & Engineering</div>
+        <div style="margin-top:6px;font-size:11px;color:var(--text3)">RIMT University, Mandi Gobindgarh</div>
+        <div class="prof-stats">
+          <div class="pstat"><div class="pstat-val" id="ps-courses">0</div><div class="pstat-lbl">Courses</div></div>
+          <div class="pstat"><div class="pstat-val" id="ps-students">0</div><div class="pstat-lbl">Students</div></div>
+          <div class="pstat"><div class="pstat-val" id="ps-lectures">0</div><div class="pstat-lbl">Lectures</div></div>
+        </div>
+      </div>
+      <div class="stag">
+        <div class="pmenu-item" onclick="openM('editProfileM')"><div class="pmi-icon">✏️</div><div class="pmi-lbl">Edit Profile</div><div class="pmi-arr">›</div></div>
+        <div class="pmenu-item" onclick="nav('courses')"><div class="pmi-icon">📚</div><div class="pmi-lbl">Manage My Courses</div><div class="pmi-arr">›</div></div>
+        <div class="pmenu-item" onclick="openM('notifM')"><div class="pmi-icon">🔔</div><div class="pmi-lbl">Notifications</div><div class="pmi-arr">›</div></div>
+        <div class="pmenu-item"><div class="pmi-icon">📊</div><div class="pmi-lbl">Attendance Reports</div><div class="pmi-arr">›</div></div>
+        <div class="pmenu-item" style="border-color:rgba(239,68,68,.2)"><div class="pmi-icon">🚪</div><div class="pmi-lbl" style="color:#ef4444">Sign Out</div><div class="pmi-arr" style="color:#ef4444">›</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bnav">
+    <div class="bni active" id="bn-dashboard" onclick="nav('dashboard');setBN(this)"><div class="bni-icon">🏠</div><div class="bni-lbl">Home</div></div>
+    <div class="bni" id="bn-courses" onclick="nav('courses');setBN(this)"><div class="bni-icon">📚</div><div class="bni-lbl">Courses</div></div>
+    <div class="bni" id="bn-materials" onclick="nav('materials');setBN(this)"><div class="bni-icon">📁</div><div class="bni-lbl">Materials</div></div>
+    <div class="bni" id="bn-chat" onclick="openChatPage();setBN(this)">
+      <div class="bni-icon" style="position:relative">💬<span style="position:absolute;top:-4px;right:-4px;background:var(--cyan);color:var(--navy);border-radius:10px;font-size:8px;font-weight:800;padding:1px 4px">3</span></div>
+      <div class="bni-lbl">Chat</div>
+    </div>
+    <div class="bni" id="bn-profile" onclick="nav('profile');setBN(this)"><div class="bni-icon">👤</div><div class="bni-lbl">Profile</div></div>
+  </div>
+</div>
+
+<!-- ═══ FULL-SCREEN PANELS ═══ -->
+
+<!-- COURSE DETAIL PANEL -->
+<div class="fsp" id="fsp-course">
+  <div class="fsp-header">
+    <div class="backbtn" onclick="closeFSP('fsp-course')">←</div>
+    <div style="flex:1"><div style="font-size:15px;font-weight:800" id="fsp-c-name">Course</div><div style="font-size:10.5px;color:var(--text3)" id="fsp-c-code">Code</div></div>
+    <div class="hbtn" onclick="editCurrentCourse()" style="font-size:13px">✏️</div>
+    <div onclick="openM('addStudentM')" style="padding:7px 13px;border-radius:9px;background:linear-gradient(135deg,var(--blue),var(--indigo));font-size:11px;font-weight:700;cursor:pointer;margin-left:4px">+ Student</div>
+  </div>
+  <div class="fsp-body">
+    <!-- Tabs inside course -->
+    <div style="display:flex;gap:0;margin-bottom:14px;border-bottom:1px solid var(--border2)">
+      <div class="ntab active" id="ct-students" onclick="showCourseTab('students')">👥 Students</div>
+      <div class="ntab" id="ct-attendance" onclick="showCourseTab('attendance')">✅ Attendance</div>
+      <div class="ntab" id="ct-history" onclick="showCourseTab('history')">📊 History</div>
+      <div class="ntab" id="ct-notes" onclick="showCourseTab('cnotes')">📝 Notes</div>
+    </div>
+
+    <!-- STUDENTS TAB -->
+    <div id="tab-students">
+      <div class="sbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input class="sinp" placeholder="Search students..." oninput="filterStudents(this.value)"/></div>
+      <div id="student-list-wrap"></div>
+      <div id="no-students-msg" style="display:none;text-align:center;padding:30px;color:var(--text3)">
+        <div style="font-size:40px;margin-bottom:10px">👤</div>
+        <div style="font-size:13px;font-weight:700">No students yet</div>
+        <div style="font-size:11px;margin-top:4px">Tap "+ Student" to add students</div>
+      </div>
+    </div>
+
+    <!-- ATTENDANCE TAB -->
+    <div id="tab-attendance" style="display:none">
+      <div class="att-note-box">
+        <div class="att-note-icon">📋</div>
+        <textarea class="att-note-input" id="att-note-txt" placeholder="Lecture note / topic covered today... (optional)" rows="2"></textarea>
+      </div>
+      <div class="sect-lbl">Lecture Number</div>
+      <div class="lec-bar" id="lec-bar"></div>
+      <div class="att-summary-row">
+        <div class="att-chip p"><div class="ach-num p" id="as-p">0</div><div class="ach-lbl">PRESENT</div></div>
+        <div class="att-chip a"><div class="ach-num a" id="as-a">0</div><div class="ach-lbl">ABSENT</div></div>
+        <div class="att-chip n"><div class="ach-num n" id="as-n">0</div><div class="ach-lbl">UNMARKED</div></div>
+      </div>
+      <div class="tap-hint">👆 Tap once = Present (green) · Double tap = Absent (red)</div>
+      <div id="att-student-wrap"></div>
+      <button class="btn-p" style="margin-top:12px" onclick="saveAttendance()">💾 Save Attendance</button>
+    </div>
+
+    <!-- HISTORY TAB -->
+    <div id="tab-history" style="display:none">
+      <div class="sect-lbl">Past Attendance Records</div>
+      <div id="history-list"></div>
+    </div>
+
+    <!-- COURSE NOTES TAB -->
+    <div id="tab-cnotes" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px">
+        <div class="sect-lbl" style="margin:0">Course Notes</div>
+        <div class="sa" onclick="openM('cNoteM')">+ Add Note</div>
+      </div>
+      <div id="cnotes-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CHAT PAGE -->
+<div class="fsp" id="fsp-chat">
+  <div class="fsp-header">
+    <div class="backbtn" onclick="closeFSP('fsp-chat');setBN(document.getElementById('bn-dashboard'))">←</div>
+    <div style="flex:1;font-size:16px;font-weight:800">Messages</div>
+    <div class="hbtn" onclick="openM('newChatM')">✏️</div>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding:12px 14px 10px;scrollbar-width:none">
+    <div class="sbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input class="sinp" placeholder="Search..."/></div>
+    <div class="pills"><div class="pill active">All</div><div class="pill">Groups</div><div class="pill">Direct</div></div>
+    <div id="chat-list" class="stag"></div>
+  </div>
+</div>
+
+<!-- CHAT WINDOW -->
+<div class="chat-win" id="chat-win">
+  <div class="cw-header">
+    <div class="backbtn" onclick="closeChatWin()">←</div>
+    <div class="cw-av" id="cw-av">👥</div>
+    <div style="flex:1"><div class="cw-name" id="cw-name">Chat</div><div class="cw-sub" id="cw-sub">—</div></div>
+    <div class="hbtn" onclick="openM('shareFM')">📎</div>
+    <div class="hbtn">📹</div>
+  </div>
+  <div class="cmsgs" id="cmsgs"></div>
+  <div class="cinput-bar">
+    <div class="cinput-wrap">
+      <span style="font-size:17px;cursor:pointer;color:var(--text3)" onclick="openM('shareFM')">📎</span>
+      <input class="cinput" id="cinput" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendMsg()"/>
+    </div>
+    <div class="csend" onclick="sendMsg()">➤</div>
+  </div>
+</div>
+
+<!-- ═══ MODALS ═══ -->
+
+<!-- ADD COURSE -->
+<div class="movl" id="addCourseM" onclick="closeMBG(event,'addCourseM')">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">📚 Add New Course</div>
+    <input class="ifield" id="new-course-name" placeholder="Course Name (e.g. Data Structures)"/>
+    <input class="ifield" id="new-course-code" placeholder="Course Code (e.g. CS401)"/>
+    <input class="ifield" id="new-course-sem" placeholder="Semester / Section (e.g. Sem V – A)"/>
+    <input class="ifield" id="new-course-room" placeholder="Room / Lab (optional)"/>
+    <div style="display:flex;gap:8px;margin-bottom:9px;flex-wrap:wrap">
+      <span style="font-size:12px;color:var(--text3)">Icon:</span>
+      <span onclick="selectIcon(this,'📘')" style="font-size:20px;cursor:pointer;padding:3px 6px;border-radius:7px;border:1px solid var(--border)">📘</span>
+      <span onclick="selectIcon(this,'💻')" style="font-size:20px;cursor:pointer;padding:3px 6px;border-radius:7px;border:1px solid var(--border)">💻</span>
+      <span onclick="selectIcon(this,'🔬')" style="font-size:20px;cursor:pointer;padding:3px 6px;border-radius:7px;border:1px solid var(--border)">🔬</span>
+      <span onclick="selectIcon(this,'🧮')" style="font-size:20px;cursor:pointer;padding:3px 6px;border-radius:7px;border:1px solid var(--border)">🧮</span>
+      <span onclick="selectIcon(this,'⚡')" style="font-size:20px;cursor:pointer;padding:3px 6px;border-radius:7px;border:1px solid var(--border)">⚡</span>
+      <span onclick="selectIcon(this,'🎨')" style="font-size:20px;cursor:pointer;padding:3px 6px;border-radius:7px;border:1px solid var(--border)">🎨</span>
+    </div>
+    <input type="hidden" id="new-course-icon" value="📘"/>
+    <button class="btn-p" onclick="addCourse()">Create Course</button>
+    <button class="btn-s" onclick="closeM('addCourseM')">Cancel</button>
+  </div>
+</div>
+
+<!-- EDIT COURSE -->
+<div class="movl" id="editCourseM" onclick="closeMBG(event,'editCourseM')">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">✏️ Edit Course</div>
+    <input class="ifield" id="edit-course-name" placeholder="Course Name"/>
+    <input class="ifield" id="edit-course-code" placeholder="Course Code"/>
+    <input class="ifield" id="edit-course-sem" placeholder="Semester / Section"/>
+    <input class="ifield" id="edit-course-room" placeholder="Room / Lab"/>
+    <button class="btn-p" onclick="saveCourseEdit()">Save Changes</button>
+    <button class="btn-d" onclick="deleteCourse()">🗑️ Delete Course</button>
+    <button class="btn-s" onclick="closeM('editCourseM')">Cancel</button>
+  </div>
+</div>
+
+<!-- ADD STUDENT -->
+<div class="movl" id="addStudentM" onclick="closeMBG(event,'addStudentM')">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">👤 Add Student</div>
+    <input class="ifield" id="new-stu-name" placeholder="Full Name"/>
+    <input class="ifield" id="new-stu-roll" placeholder="Roll Number"/>
+    <input class="ifield" id="new-stu-email" placeholder="Email (optional)"/>
+    <button class="btn-p" onclick="addStudent()">Add Student</button>
+    <button class="btn-s" onclick="closeM('addStudentM')">Cancel</button>
+  </div>
+</div>
+
+<!-- EDIT STUDENT -->
+<div class="movl" id="editStudentM" onclick="closeMBG(event,'editStudentM')">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">✏️ Edit Student</div>
+    <input class="ifield" id="edit-stu-name" placeholder="Full Name"/>
+    <input class="ifield" id="edit-stu-roll" placeholder="Roll Number"/>
+    <input class="ifield" id="edit-stu-email" placeholder="Email (optional)"/>
+    <input type="hidden" id="edit-stu-id"/>
+    <button class="btn-p" onclick="saveStudentEdit()">Save Changes</button>
+    <button class="btn-d" onclick="deleteStudent()">🗑️ Remove Student</button>
+    <button class="btn-s" onclick="closeM('editStudentM')">Cancel</button>
+  </div>
+</div>
+
+<!-- NEW NOTE -->
+<div class="movl" id="noteM" onclick="closeMBG(event,'noteM')">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">✍️ New Note</div>
+    <input class="ifield" id="note-title" placeholder="Note Title"/>
+    <select class="ifield" id="note-tag">
+      <option value="General">General</option>
+      <option value="Personal">Personal</option>
+      <option value="Admin">Admin</option>
+    </select>
+    <textarea class="ifield" id="note-body" style="height:110px;resize:none;line-height:1.5" placeholder="Write your note here..."></textarea>
+    <button class="btn-p" onclick="addNote(false)">Save Note</button>
+    <button class="btn-s" onclick="closeM('noteM')">Cancel</button>
+  </div>
+</div>
+
+<!-- COURSE NOTE -->
+<div class="movl" id="cNoteM" onclick="closeMBG(event,'cNoteM')">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">📝 Course Note</div>
+    <input class="ifield" id="cnote-title" placeholder="Note Title"/>
+    <textarea class="ifield" id="cnote-body" style="height:110px;resize:none;line-height:1.5" placeholder="Write your note here..."></textarea>
+    <button class="btn-p" onclick="addCourseNote()">Save Note</button>
+    <button class="btn-s" onclick="closeM('cNoteM')">Cancel</button>
+  </div>
+</div>
+
+<!-- UPLOAD MATERIAL -->
+<div class="movl" id="uploadM" onclick="closeMBG(event,'uploadM')">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">📤 Upload Material</div>
+    <input class="ifield" placeholder="Title / File Name" id="mat-title"/>
+    <select class="ifield" id="mat-course"><option value="">Select Course</option></select>
+    <input type="file" id="mat-file" style="display:none" onchange="handleFileSelect(event)"/>
+    <div onclick="document.getElementById('mat-file').click()" style="border:2px dashed rgba(100,160,255,.22);border-radius:11px;padding:28px;text-align:center;margin-bottom:9px;cursor:pointer">
+      <div style="font-size:34px;margin-bottom:5px">📂</div>
+      <div id="file-name-display" style="font-size:13px;font-weight:600;color:var(--text2)">Tap to Select File</div>
+      <div style="font-size:10.5px;color:var(--text3);margin-top:3px">PDF, PPTX, DOCX, MP4</div>
+    </div>
+    <button class="btn-p" onclick="addMaterial()">Upload File</button>
+    <button class="btn-s" onclick="closeM('uploadM')">Cancel</button>
+  </div>
+</div>
+
+<!-- EDIT PROFILE -->
+<div class="movl" id="editProfileM" onclick="closeMBG(event,'editProfileM')">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">✏️ Edit Profile</div>
+    <input class="ifield" id="ep-name" placeholder="Full Name"/>
+    <input class="ifield" id="ep-initials" placeholder="Initials (e.g. PK)"/>
+    <input class="ifield" id="ep-role" placeholder="Designation (e.g. Associate Professor)"/>
+    <input class="ifield" id="ep-dept" placeholder="Department"/>
+    <input class="ifield" id="ep-univ" placeholder="University"/>
+    <button class="btn-p" onclick="saveProfile()">Save Profile</button>
+    <button class="btn-s" onclick="closeM('editProfileM')">Cancel</button>
+  </div>
+</div>
+
+<!-- NOTIFICATIONS -->
+<div class="movl" id="notifM" onclick="closeMBG(event,'notifM')">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">🔔 Notifications</div>
+    <div style="display:flex;flex-direction:column;gap:9px">
+      <div class="card" style="margin:0;padding:12px"><div style="font-size:13px;font-weight:600">📊 Attendance Report Ready</div><div style="font-size:11px;color:var(--text3);margin-top:4px">CS401 – March report ready</div></div>
+      <div class="card" style="margin:0;padding:12px"><div style="font-size:13px;font-weight:600">💬 Dr. Sharma sent a file</div><div style="font-size:11px;color:var(--text3);margin-top:4px">Shared Lab Manual · 2h ago</div></div>
+      <div class="card" style="margin:0;padding:12px"><div style="font-size:13px;font-weight:600">⚠️ Low Attendance Alert</div><div style="font-size:11px;color:var(--amber);margin-top:4px">5 students below 75% in CS403</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SHARE FILE -->
+<div class="movl" id="shareFM" onclick="closeMBG(event,'shareFM')">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">📎 Share Material</div>
+    <div id="share-file-list"></div>
+    <button class="btn-s" onclick="closeM('shareFM')">Cancel</button>
+  </div>
+</div>
+
+<!-- NEW CHAT -->
+<div class="movl" id="newChatM" onclick="closeMBG(event,'newChatM')">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">💬 New Message</div>
+    <input class="ifield" placeholder="Search faculty..."/>
+    <div class="cli" onclick="closeM('newChatM');openChat('dr-sharma')"><div class="clav">DS</div><div class="clinfo"><div class="clname">Dr. Rahul Sharma</div><div class="cllast">Physics Dept</div></div></div>
+    <div class="cli" onclick="closeM('newChatM');openChat('prof-mehta')"><div class="clav">PM</div><div class="clinfo"><div class="clname">Prof. Anjali Mehta</div><div class="cllast">Maths Dept</div></div></div>
+    <div class="cli" onclick="closeM('newChatM');openChat('dr-singh')"><div class="clav">RS</div><div class="clinfo"><div class="clname">Dr. Rajinder Singh (HOD)</div><div class="cllast">HOD – CSE</div></div></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// SPLASH
+// ══════════════════════════════════════
+const sp=document.getElementById('sparts');
+for(let i=0;i<20;i++){const p=document.createElement('div');p.className='sp';p.style.left=Math.random()*100+'%';p.style.top=Math.random()*100+'%';p.style.animationDelay=Math.random()*4+'s';p.style.animationDuration=(3+Math.random()*3)+'s';p.style.background=['#00d4ff','#818cf8','#3b82f6','#60a5fa'][Math.floor(Math.random()*4)];p.style.width=p.style.height=(2+Math.random()*3)+'px';sp.appendChild(p)}
+const sptxt=document.getElementById('sptxt');
+const msgs=['Initializing...','Loading portal...','Syncing data...','Ready!'];
+let pct=0;
+const pi=setInterval(()=>{pct+=Math.floor(Math.random()*8)+3;if(pct>=100){pct=100;clearInterval(pi)}sptxt.textContent=msgs[Math.min(Math.floor(pct/25),3)];},110);
+setTimeout(()=>{const s=document.getElementById('splash');const m=document.getElementById('main');s.classList.add('splash-out');m.style.display='flex';setTimeout(()=>s.style.display='none',600);refreshDash();},3600);
+
+// ══════════════════════════════════════
+// STATE (localStorage)
+// ══════════════════════════════════════
+let DB={
+  profile:{name:'Dr. Preeti Kaur',initials:'PK',role:'Associate Professor',dept:'Computer Science & Engineering',univ:'RIMT University'},
+  courses:[],
+  notes:[
+    {id:1,title:'Upcoming Syllabus Plan',body:'Unit 4 remaining: Hashing, B-trees. Complete by April 8. Schedule revision week April 12–14.',tag:'General',date:'Mar 30',pin:true},
+    {id:2,title:'HOD Meeting Notes',body:'Semester end exams: April 20–30. Lab practicals: April 15–18. Submit innovation cell proposal by April 10.',tag:'Admin',date:'Mar 28',pin:false},
+  ]
+};
+function save(){try{localStorage.setItem('rimtify_db',JSON.stringify(DB));}catch(e){}}
+function load(){try{const d=localStorage.getItem('rimtify_db');if(d){DB=JSON.parse(d);}}catch(e){}}
+load();
+
+// ══════════════════════════════════════
+// NAV
+// ══════════════════════════════════════
+function nav(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const pg=document.getElementById('pg-'+page);
+  if(pg)pg.classList.add('active');
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.toggle('active',t.dataset.p===page));
+  if(page==='dashboard')refreshDash();
+  if(page==='courses')renderCourses();
+  if(page==='notes')renderNotes(DB.notes);
+  if(page==='profile')renderProfile();
+}
+function setBN(el){document.querySelectorAll('.bni').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active')}
+function openFSP(id){document.getElementById(id).classList.add('open')}
+function closeFSP(id){document.getElementById(id).classList.remove('open')}
+
+// ══════════════════════════════════════
+// PROFILE
+// ══════════════════════════════════════
+function renderProfile(){
+  const p=DB.profile;
+  document.getElementById('prof-av-display').textContent=p.initials||'PK';
+  document.getElementById('prof-name-display').textContent=p.name;
+  document.getElementById('prof-dept-display').textContent=p.role+' · '+p.dept;
+  const total=DB.courses.reduce((a,c)=>a+c.students.length,0);
+  const lecs=DB.courses.reduce((a,c)=>a+Object.keys(c.attendance).length,0);
+  document.getElementById('ps-courses').textContent=DB.courses.length;
+  document.getElementById('ps-students').textContent=total;
+  document.getElementById('ps-lectures').textContent=lecs;
+  document.getElementById('wname').textContent=p.name;
+  document.getElementById('wrole').textContent='📚 '+p.role+' · '+p.dept;
+  document.getElementById('uav').textContent=p.initials||'PK';
+}
+function openEditProfile(){
+  const p=DB.profile;
+  document.getElementById('ep-name').value=p.name;
+  document.getElementById('ep-initials').value=p.initials;
+  document.getElementById('ep-role').value=p.role;
+  document.getElementById('ep-dept').value=p.dept;
+  document.getElementById('ep-univ').value=p.univ;
+  openM('editProfileM');
+}
+document.querySelectorAll('.pmenu-item')[0].onclick=openEditProfile;
+function saveProfile(){
+  DB.profile={
+    name:document.getElementById('ep-name').value||DB.profile.name,
+    initials:document.getElementById('ep-initials').value||DB.profile.initials,
+    role:document.getElementById('ep-role').value||DB.profile.role,
+    dept:document.getElementById('ep-dept').value||DB.profile.dept,
+    univ:document.getElementById('ep-univ').value||DB.profile.univ,
+  };
+  save();renderProfile();closeM('editProfileM');toast('✅ Profile updated!');
+}
+
+// ══════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════
+function refreshDash(){
+  const h=new Date().getHours();
+  const gr=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+  document.getElementById('wgreet').textContent=gr+' 👋';
+  renderProfile();
+  const total=DB.courses.reduce((a,c)=>a+c.students.length,0);
+  const lecs=DB.courses.reduce((a,c)=>a+Object.keys(c.attendance).length,0);
+  document.getElementById('ds-courses').textContent=DB.courses.length;
+  document.getElementById('ds-students').textContent=total;
+  document.getElementById('ds-lectures').textContent=lecs;
+  document.getElementById('ds-notes').textContent=DB.notes.length;
+  // Dash courses preview
+  const dc=document.getElementById('dash-courses');
+  if(DB.courses.length===0){dc.innerHTML='<div style="text-align:center;padding:30px;color:var(--text3)"><div style="font-size:40px;margin-bottom:10px">📚</div><div style="font-size:13px;font-weight:700">No courses yet</div><div style="font-size:11px;margin-top:4px">Go to Courses tab to create one</div></div>';return}
+  dc.innerHTML='';
+  DB.courses.slice(0,3).forEach(c=>{
+    const pct=calcPct(c);
+    const p=countStu(c,'P'),a=countStu(c,'A');
+    dc.innerHTML+=`<div class="ccard" onclick="openCourseDetail('${c.id}')">
+      <div class="cc-top">
+        <div style="display:flex;gap:10px;align-items:center">
+          <div class="cc-icon" style="background:rgba(26,111,255,.15)">${c.icon||'📘'}</div>
+          <div><div class="cc-name">${c.name}</div><div class="cc-code">${c.code} · ${c.students.length} students</div></div>
+        </div>
+        <div class="cc-pct">${pct}%</div>
+      </div>
+      <div class="cc-bar-bg"><div class="cc-bar-fill" style="width:${pct}%"></div></div>
+      <div class="cc-meta"><span class="cc-chip"><span class="g-dot"></span>${p} Present</span><span class="cc-chip"><span class="r-dot"></span>${a} Absent</span></div>
+    </div>`;
+  });
+}
+
+// ══════════════════════════════════════
+// COURSES
+// ══════════════════════════════════════
+let selIcon='📘';
+function selectIcon(el,ic){selIcon=ic;document.getElementById('new-course-icon').value=ic;document.querySelectorAll('#addCourseM span[onclick]').forEach(s=>{s.style.background='transparent';s.style.borderColor='var(--border)'});el.style.background='rgba(26,111,255,.2)';el.style.borderColor='var(--blue2)'}
+function addCourse(){
+  const name=document.getElementById('new-course-name').value.trim();
+  const code=document.getElementById('new-course-code').value.trim();
+  if(!name){toast('❗ Course name required');return}
+  const c={
+    id:'c'+Date.now(),name,code,
+    sem:document.getElementById('new-course-sem').value.trim(),
+    room:document.getElementById('new-course-room').value.trim(),
+    icon:document.getElementById('new-course-icon').value||'📘',
+    students:[],
+    attendance:{},
+    courseNotes:[],
+  };
+  DB.courses.push(c);save();
+  document.getElementById('new-course-name').value='';
+  document.getElementById('new-course-code').value='';
+  document.getElementById('new-course-sem').value='';
+  document.getElementById('new-course-room').value='';
+  closeM('addCourseM');renderCourses();refreshDash();
+  toast('📚 Course created!');
+  updateMatCourseDropdown();
+}
+function renderCourses(){
+  const el=document.getElementById('courses-list');
+  const nc=document.getElementById('no-courses');
+  if(DB.courses.length===0){el.innerHTML='';nc.style.display='block';return}
+  nc.style.display='none';
+  el.innerHTML='';
+  DB.courses.forEach(c=>{
+    const pct=calcPct(c);
+    const p=countStu(c,'P'),a=countStu(c,'A');
+    el.innerHTML+=`<div class="ccard">
+      <div class="cc-top">
+        <div style="display:flex;gap:10px;align-items:center">
+          <div class="cc-icon" style="background:rgba(26,111,255,.15)">${c.icon||'📘'}</div>
+          <div><div class="cc-name">${c.name}</div><div class="cc-code">${c.code}${c.sem?' · '+c.sem:''}</div></div>
+        </div>
+        <div class="cc-pct">${pct}%</div>
+      </div>
+      <div class="cc-bar-bg"><div class="cc-bar-fill" style="width:${pct}%"></div></div>
+      <div class="cc-meta"><span class="cc-chip"><span class="g-dot"></span>${p} Present</span><span class="cc-chip"><span class="r-dot"></span>${a} Absent</span><span class="cc-chip">👤 ${c.students.length} students</span></div>
+      <div class="cc-actions">
+        <div class="cc-act-btn" onclick="openCourseDetail('${c.id}');showCourseTab('students')">👥 Students</div>
+        <div class="cc-act-btn primary" onclick="openCourseDetail('${c.id}');showCourseTab('attendance')">✅ Attendance</div>
+        <div class="cc-act-btn" onclick="openCourseDetail('${c.id}');showCourseTab('history')">📊 History</div>
+      </div>
+    </div>`;
+  });
+}
+function calcPct(c){
+  const allRecs=Object.values(c.attendance);
+  if(allRecs.length===0||c.students.length===0)return 0;
+  let totalP=0,total=0;
+  allRecs.forEach(rec=>{
+    rec.forEach(r=>{total++;if(r.s==='P')totalP++;});
+  });
+  return total===0?0:Math.round(totalP/total*100);
+}
+function countStu(c,status){
+  const allRecs=Object.values(c.attendance);
+  if(allRecs.length===0)return 0;
+  const last=allRecs[allRecs.length-1];
+  return last.filter(r=>r.s===status).length;
+}
+
+let currentCourseId=null;
+let currentLec=1;
+let attSession={};
+
+function openCourseDetail(cid){
+  currentCourseId=cid;
+  const c=getC();
+  document.getElementById('fsp-c-name').textContent=c.name;
+  document.getElementById('fsp-c-code').textContent=c.code+(c.sem?' · '+c.sem:'')+(c.room?' · '+c.room:'');
+  showCourseTab('students');
+  openFSP('fsp-course');
+}
+function getC(){return DB.courses.find(x=>x.id===currentCourseId)}
+function editCurrentCourse(){
+  const c=getC();
+  document.getElementById('edit-course-name').value=c.name;
+  document.getElementById('edit-course-code').value=c.code;
+  document.getElementById('edit-course-sem').value=c.sem||'';
+  document.getElementById('edit-course-room').value=c.room||'';
+  openM('editCourseM');
+}
+function saveCourseEdit(){
+  const c=getC();
+  c.name=document.getElementById('edit-course-name').value||c.name;
+  c.code=document.getElementById('edit-course-code').value||c.code;
+  c.sem=document.getElementById('edit-course-sem').value;
+  c.room=document.getElementById('edit-course-room').value;
+  document.getElementById('fsp-c-name').textContent=c.name;
+  document.getElementById('fsp-c-code').textContent=c.code+(c.sem?' · '+c.sem:'')+(c.room?' · '+c.room:'');
+  save();renderCourses();closeM('editCourseM');toast('✅ Course updated!');
+}
+function deleteCourse(){
+  if(!confirm('Delete this course? All attendance data will be lost.'))return;
+  DB.courses=DB.courses.filter(x=>x.id!==currentCourseId);
+  save();closeM('editCourseM');closeFSP('fsp-course');renderCourses();refreshDash();toast('🗑️ Course deleted');
+}
+
+// ── COURSE TABS ──
+function showCourseTab(tab){
+  ['students','attendance','history','cnotes'].forEach(t=>{
+    document.getElementById('tab-'+t).style.display=t===tab?'block':'none';
+    const btn=document.getElementById('ct-'+t);
+    if(btn)btn.classList.toggle('active',t===tab);
+  });
+  if(tab==='students')renderStudentList();
+  if(tab==='attendance'){initAttSession();renderAttStudents();}
+  if(tab==='history')renderHistory();
+  if(tab==='cnotes')renderCourseNotes();
+}
+
+// ══════════════════════════════════════
+// STUDENTS
+// ══════════════════════════════════════
+function addStudent(){
+  const name=document.getElementById('new-stu-name').value.trim();
+  const roll=document.getElementById('new-stu-roll').value.trim();
+  if(!name){toast('❗ Name required');return}
+  const c=getC();
+  c.students.push({id:'s'+Date.now(),name,roll,email:document.getElementById('new-stu-email').value.trim(),s:'none'});
+  save();
+  document.getElementById('new-stu-name').value='';
+  document.getElementById('new-stu-roll').value='';
+  document.getElementById('new-stu-email').value='';
+  closeM('addStudentM');renderStudentList();toast('👤 Student added!');
+}
+function renderStudentList(filter=''){
+  const c=getC();
+  const wrap=document.getElementById('student-list-wrap');
+  const nomsg=document.getElementById('no-students-msg');
+  const list=c.students.filter(s=>s.name.toLowerCase().includes(filter.toLowerCase())||s.roll.includes(filter));
+  if(list.length===0&&filter===''){wrap.innerHTML='';nomsg.style.display='block';return}
+  nomsg.style.display='none';
+  wrap.innerHTML=list.map(s=>`<div class="stu-manage-row">
+    <div class="stu-m-av">${s.name[0]}</div>
+    <div class="stu-m-info"><div class="stu-m-name">${s.name}</div><div class="stu-m-roll">${s.roll||'No roll no.'}${s.email?' · '+s.email:''}</div></div>
+    <div class="stu-m-actions">
+      <div class="stu-edit-btn" onclick="openEditStudent('${s.id}')">✏️</div>
+      <div class="stu-edit-btn" onclick="quickDeleteStudent('${s.id}')" style="color:#ef4444">🗑️</div>
+    </div>
+  </div>`).join('');
+}
+function filterStudents(v){renderStudentList(v)}
+function openEditStudent(sid){
+  const c=getC();const s=c.students.find(x=>x.id===sid);
+  document.getElementById('edit-stu-name').value=s.name;
+  document.getElementById('edit-stu-roll').value=s.roll;
+  document.getElementById('edit-stu-email').value=s.email||'';
+  document.getElementById('edit-stu-id').value=sid;
+  openM('editStudentM');
+}
+function saveStudentEdit(){
+  const c=getC();const sid=document.getElementById('edit-stu-id').value;
+  const s=c.students.find(x=>x.id===sid);
+  s.name=document.getElementById('edit-stu-name').value||s.name;
+  s.roll=document.getElementById('edit-stu-roll').value;
+  s.email=document.getElementById('edit-stu-email').value;
+  save();closeM('editStudentM');renderStudentList();toast('✅ Student updated!');
+}
+function deleteStudent(){
+  const c=getC();const sid=document.getElementById('edit-stu-id').value;
+  c.students=c.students.filter(x=>x.id!==sid);
+  save();closeM('editStudentM');renderStudentList();toast('🗑️ Student removed');
+}
+function quickDeleteStudent(sid){
+  const c=getC();
+  c.students=c.students.filter(x=>x.id!==sid);
+  save();renderStudentList();toast('🗑️ Student removed');
+}
+
+// ══════════════════════════════════════
+// ATTENDANCE (TODO-STYLE)
+// ══════════════════════════════════════
+function initAttSession(){
+  const c=getC();
+  currentLec=Object.keys(c.attendance).length+1;
+  if(currentLec>8)currentLec=8;
+  // Build fresh session map
+  attSession={};
+  c.students.forEach(s=>{attSession[s.id]='none'});
+  // If session exists for this lecture
+  const key=lecKey(currentLec);
+  if(c.attendance[key]){
+    c.attendance[key].forEach(r=>{attSession[r.id]=r.s});
+  }
+  buildLecBar();
+}
+function lecKey(n){return 'L'+n}
+function buildLecBar(){
+  const bar=document.getElementById('lec-bar');
+  bar.innerHTML='';
+  for(let i=1;i<=8;i++){
+    bar.innerHTML+=`<div class="lec-btn${i===currentLec?' active':''}" onclick="selectLec(${i})">L${i}</div>`;
+  }
+}
+function selectLec(n){
+  const c=getC();
+  currentLec=n;
+  attSession={};
+  c.students.forEach(s=>{attSession[s.id]='none'});
+  const key=lecKey(n);
+  if(c.attendance[key]){
+    c.attendance[key].forEach(r=>{attSession[r.id]=r.s});
+  }
+  buildLecBar();
+  renderAttStudents();
+}
+let tapTimers={};
+function renderAttStudents(){
+  const c=getC();
+  const wrap=document.getElementById('att-student-wrap');
+  if(c.students.length===0){wrap.innerHTML='<div style="text-align:center;padding:30px;color:var(--text3)"><div style="font-size:40px;margin-bottom:10px">👥</div><div style="font-size:13px;font-weight:700">No students in this course</div><div style="font-size:11px;margin-top:4px">Add students first from the Students tab</div></div>';updateAttSummary();return}
+  wrap.innerHTML=c.students.map(s=>{
+    const st=attSession[s.id]||'none';
+    const label=st==='P'?'✓ Present':st==='A'?'✗ Absent':'— Tap to mark';
+    return `<div class="stu-todo-row ${st}" id="arow-${s.id}" onclick="tapAtt('${s.id}')">
+      <div class="stu-av" id="aav-${s.id}">${s.name[0]}</div>
+      <div class="stu-info"><div class="stu-name">${s.name}</div><div class="stu-roll">${s.roll||'—'}</div></div>
+      <div class="stu-status-badge" id="abadge-${s.id}">${label}</div>
+    </div>`;
+  }).join('');
+  updateAttSummary();
+}
+function tapAtt(sid){
+  const cur=attSession[sid]||'none';
+  let next;
+  if(cur==='none')next='P';
+  else if(cur==='P')next='A';
+  else next='none';
+  attSession[sid]=next;
+  // Update row
+  const row=document.getElementById('arow-'+sid);
+  const badge=document.getElementById('abadge-'+sid);
+  row.className='stu-todo-row '+next;
+  badge.textContent=next==='P'?'✓ Present':next==='A'?'✗ Absent':'— Tap to mark';
+  // Haptic feedback
+  if(navigator.vibrate)navigator.vibrate(next==='P'?[20]:next==='A'?[20,10,20]:[5]);
+  updateAttSummary();
+}
+function updateAttSummary(){
+  const vals=Object.values(attSession);
+  const p=vals.filter(v=>v==='P').length;
+  const a=vals.filter(v=>v==='A').length;
+  const n=vals.filter(v=>v==='none').length;
+  document.getElementById('as-p').textContent=p;
+  document.getElementById('as-a').textContent=a;
+  document.getElementById('as-n').textContent=n;
+}
+function saveAttendance(){
+  const c=getC();
+  const key=lecKey(currentLec);
+  const note=document.getElementById('att-note-txt').value.trim();
+  c.attendance[key]=c.students.map(s=>({id:s.id,name:s.name,roll:s.roll,s:attSession[s.id]||'none'}));
+  if(note)c.attendance[key]._note=note;
+  save();refreshDash();
+  toast('💾 Lecture '+currentLec+' attendance saved!');
+  // move to next
+  if(currentLec<8){currentLec++;buildLecBar();}
+  renderHistory();
+}
+
+// ── HISTORY ──
+function renderHistory(){
+  const c=getC();
+  const el=document.getElementById('history-list');
+  const keys=Object.keys(c.attendance).sort();
+  if(keys.length===0){el.innerHTML='<div style="text-align:center;padding:30px;color:var(--text3)"><div style="font-size:40px;margin-bottom:10px">📊</div><div style="font-size:13px;font-weight:700">No records yet</div></div>';return}
+  el.innerHTML='';
+  keys.forEach(key=>{
+    const rec=c.attendance[key];
+    const p=rec.filter(r=>r.s==='P').length;
+    const a=rec.filter(r=>r.s==='A').length;
+    const note=rec._note||'';
+    el.innerHTML+=`<div>
+      <div class="lh-row">
+        <div class="lh-lec">Lecture ${key.slice(1)}</div>
+        <div class="lh-stats"><span class="lh-p">✓ ${p}</span><span class="lh-a">✗ ${a}</span></div>
+      </div>
+      ${note?`<div style="font-size:11px;color:var(--text3);padding:4px 12px 8px">📋 ${note}</div>`:''}
+      <div style="margin-bottom:7px;padding:0 2px">
+        ${rec.filter(r=>r.s==='A').map(r=>`<span style="display:inline-block;padding:2px 8px;border-radius:20px;background:rgba(239,68,68,.12);color:#f87171;font-size:10px;font-weight:600;margin:2px">${r.name}</span>`).join('')}
+      </div>
+    </div>`;
+  });
+  // Export button
+  el.innerHTML+=`<div onclick="exportCourseCSV()" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;border-radius:10px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);cursor:pointer;font-size:13px;font-weight:600;color:#34d399;margin-top:6px">⬇️ Export CSV</div>`;
+}
+function exportCourseCSV(){
+  const c=getC();
+  let csv='Student Name,Roll No';
+  const keys=Object.keys(c.attendance).sort();
+  keys.forEach(k=>csv+=',Lec '+k.slice(1));
+  csv+=',Total Present,Attendance %\n';
+  c.students.forEach(s=>{
+    let row=`${s.name},${s.roll||'—'}`;
+    let p=0;
+    keys.forEach(k=>{
+      const rec=c.attendance[k];
+      const r=rec.find(x=>x.id===s.id);
+      const st=r?r.s:'—';
+      row+=','+st;
+      if(st==='P')p++;
+    });
+    row+=`,${p},${keys.length>0?Math.round(p/keys.length*100)+'%':'—'}`;
+    csv+=row+'\n';
+  });
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download=`${c.code}_attendance.csv`;a.click();
+  toast('📊 CSV exported!');
+}
+
+// ══════════════════════════════════════
+// COURSE NOTES
+// ══════════════════════════════════════
+function addCourseNote(){
+  const title=document.getElementById('cnote-title').value.trim();
+  const body=document.getElementById('cnote-body').value.trim();
+  if(!title)return;
+  const c=getC();
+  if(!c.courseNotes)c.courseNotes=[];
+  c.courseNotes.unshift({id:'n'+Date.now(),title,body,date:new Date().toLocaleDateString('en-IN',{month:'short',day:'numeric'})});
+  save();
+  document.getElementById('cnote-title').value='';document.getElementById('cnote-body').value='';
+  closeM('cNoteM');renderCourseNotes();toast('📝 Note saved!');
+}
+function renderCourseNotes(){
+  const c=getC();
+  const el=document.getElementById('cnotes-list');
+  if(!c.courseNotes||c.courseNotes.length===0){el.innerHTML='<div style="text-align:center;padding:30px;color:var(--text3)"><div style="font-size:40px;margin-bottom:10px">📝</div><div style="font-size:13px;font-weight:700">No notes yet</div></div>';return}
+  el.innerHTML=c.courseNotes.map(n=>`<div class="note-card"><div class="ntitle">${n.title}</div><div class="npreview">${n.body}</div><div class="nfoot"><span class="nchip">${c.code}</span><span class="ndate">${n.date}</span></div></div>`).join('');
+}
+
+// ══════════════════════════════════════
+// GLOBAL NOTES
+// ══════════════════════════════════════
+function addNote(isCourse){
+  const title=document.getElementById('note-title').value.trim();
+  const body=document.getElementById('note-body').value.trim();
+  if(!title){toast('❗ Title required');return}
+  DB.notes.unshift({id:Date.now(),title,body:body||'No content',tag:document.getElementById('note-tag').value,date:new Date().toLocaleDateString('en-IN',{month:'short',day:'numeric'}),pin:false});
+  save();
+  document.getElementById('note-title').value='';document.getElementById('note-body').value='';
+  closeM('noteM');renderNotes(DB.notes);refreshDash();toast('📝 Note saved!');
+}
+function renderNotes(list){
+  const el=document.getElementById('notes-list');
+  el.innerHTML='';
+  if(list.length===0){el.innerHTML='<div style="text-align:center;padding:40px;color:var(--text3)"><div style="font-size:48px;margin-bottom:12px">📝</div><div style="font-size:15px;font-weight:700">No notes yet</div></div>';return}
+  list.forEach(n=>{
+    el.innerHTML+=`<div class="note-card fiu"><div class="ntitle">${n.pin?'📌 ':''}${n.title}</div><div class="npreview">${n.body}</div><div class="nfoot"><span class="nchip">${n.tag}</span><span class="ndate">${n.date}</span></div></div>`;
+  });
+}
+function searchNotes(v){renderNotes(DB.notes.filter(n=>n.title.toLowerCase().includes(v.toLowerCase())||n.body.toLowerCase().includes(v.toLowerCase())))}
+
+// ══════════════════════════════════════
+// MATERIALS
+// ══════════════════════════════════════
+function updateMatCourseDropdown(){
+  const sel=document.getElementById('mat-course');
+  sel.innerHTML='<option value="">Select Course</option>';
+  DB.courses.forEach(c=>sel.innerHTML+=`<option value="${c.id}">${c.name}</option>`);
+}
+function handleFileSelect(e){
+  const file = e.target.files[0];
+  if(file){
+    document.getElementById('mat-title').value = file.name;
+    document.getElementById('file-name-display').textContent = file.name;
+    document.getElementById('file-name-display').style.color = 'var(--text)';
+  }
+}
+function addMaterial(){
+  const title=document.getElementById('mat-title').value.trim()||'New Material.pdf';
+  const fileInput = document.getElementById('mat-file');
+  const file = fileInput.files[0];
+  let sizeStr = '—';
+  if(file){
+    const sizeMB = file.size / (1024 * 1024);
+    if(sizeMB < 1) sizeStr = Math.round(file.size / 1024) + ' KB';
+    else sizeStr = sizeMB.toFixed(1) + ' MB';
+  }
+  const ext=title.split('.').pop().toLowerCase();
+  const icons={pdf:'📕',pptx:'📙',docx:'📘',mp4:'🎬'};
+  const cls={pdf:'mpdf',pptx:'mppt',docx:'mdoc',mp4:'mvid'};
+  const ic=icons[ext]||'📄';const cl=cls[ext]||'mdoc';
+  document.getElementById('mat-list').insertAdjacentHTML('afterbegin',`<div class="mcard fiu"><div class="micon ${cl}">${ic}</div><div class="minfo"><div class="mtitle">${title}</div><div class="mmeta">Just uploaded · 0 views</div></div><div class="msize">${sizeStr}</div></div>`);
+  document.getElementById('mat-title').value='';
+  fileInput.value='';
+  document.getElementById('file-name-display').textContent='Tap to Select File';
+  document.getElementById('file-name-display').style.color='var(--text2)';
+  closeM('uploadM');toast('📤 Uploaded!');
+}
+
+// ══════════════════════════════════════
+// CHAT
+// ══════════════════════════════════════
+const chatData=[
+  {id:'fac-grp',name:'Faculty Group – CSE',last:'Dr. Sharma: Shared Lab Manual v2',time:'2h',unread:3,on:true,grp:true,av:'👥',sub:'12 members · 8 online'},
+  {id:'rimt-all',name:'RIMT All Faculty',last:'Principal: Meeting at 3 PM today',time:'4h',unread:1,on:false,grp:true,av:'🏫',sub:'48 members'},
+  {id:'dr-sharma',name:'Dr. Rahul Sharma',last:'Sure, will send notes tonight',time:'Yesterday',unread:0,on:true,grp:false,av:'DS',sub:'Physics Dept · Online'},
+  {id:'prof-mehta',name:'Prof. Anjali Mehta',last:'Thanks for the help!',time:'Yesterday',unread:0,on:false,grp:false,av:'AM',sub:'Maths Dept · Last seen 3h ago'},
+  {id:'dr-singh',name:'Dr. Rajinder Singh (HOD)',last:'Exam schedule updated. Please check.',time:'Monday',unread:2,on:true,grp:false,av:'RS',sub:'HOD – CSE · Online'},
+];
+const chatMsgs={
+  'fac-grp':[
+    {av:'DS',sender:'Dr. Sharma',text:'Good morning everyone!',time:'9:00 AM',me:false},
+    {av:'AM',sender:'Prof. Mehta',text:'Good morning! Just finished evaluations.',time:'9:15 AM',me:false},
+    {av:'PK',sender:'Me',text:'CS401 assignments received. Will share marks by Friday.',time:'9:30 AM',me:true},
+    {av:'DS',sender:'Dr. Sharma',text:'',file:'Lab Manual v2.pdf',time:'10:20 AM',me:false},
+    {av:'RS',sender:'Dr. Singh',text:'Faculty meeting at 3 PM today in Conference Room. Attendance mandatory.',time:'11:00 AM',me:false},
+  ],
+  'dr-sharma':[
+    {av:'DS',sender:'Dr. Sharma',text:'Hi! How is the ML course going?',time:'4:00 PM',me:false},
+    {av:'PK',sender:'Me',text:'Going well! Students very engaged. Just finished linear regression.',time:'4:05 PM',me:true},
+    {av:'DS',sender:'Dr. Sharma',text:'Sure, will send notes tonight',time:'8:00 PM',me:false},
+  ],
+  'dr-singh':[
+    {av:'RS',sender:'Dr. Singh',text:'Exam schedule updated. Please check the portal.',time:'10:00 AM',me:false},
+    {av:'PK',sender:'Me',text:'Checked. Will prepare accordingly. Thank you sir.',time:'10:30 AM',me:true},
+  ],
+};
+let curChat=null;
+function renderChatList(){
+  document.getElementById('chat-list').innerHTML=chatData.map(c=>`
+    <div class="cli" onclick="openChat('${c.id}')">
+      <div class="clav-wrap"><div class="clav ${c.grp?'grp':''}">${c.av}</div>${c.on?'<div class="ondot"></div>':''}</div>
+      <div class="clinfo">
+        <div class="clname">${c.name}${c.grp?'<span class="grp-badge">GROUP</span>':''}</div>
+        <div class="cllast">${c.last}</div>
+      </div>
+      <div class="clmeta"><div class="cltime">${c.time}</div>${c.unread>0?`<div class="clunread">${c.unread}</div>`:''}</div>
+    </div>`).join('');
+}
+function openChatPage(){
+  openFSP('fsp-chat');renderChatList();
+}
+function openChat(id){
+  curChat=id;
+  const c=chatData.find(x=>x.id===id)||{name:id,av:'👥',sub:'',grp:true};
+  c.unread=0;renderChatList();
+  document.getElementById('cw-av').textContent=c.av;
+  document.getElementById('cw-av').className='cw-av'+(c.grp?' grp':'');
+  document.getElementById('cw-name').textContent=c.name;
+  document.getElementById('cw-sub').textContent=c.sub||'';
+  const msgs=document.getElementById('cmsgs');msgs.innerHTML='<div class="cdatediv">Today</div>';
+  (chatMsgs[id]||[]).forEach(m=>{
+    msgs.insertAdjacentHTML('beforeend',`<div class="mrow ${m.me?'me':''}">
+      ${!m.me?`<div class="mav">${m.av}</div>`:''}
+      <div style="${m.me?'display:flex;flex-direction:column;align-items:flex-end':''}">
+        ${!m.me&&c.grp?`<div class="msender">${m.sender}</div>`:''}
+        ${m.text?`<div class="mbubble">${m.text}${m.file?`<div class="mfile">📎 ${m.file}</div>`:''}</div>`:`<div class="mbubble"><div class="mfile">📎 ${m.file}</div></div>`}
+        <div class="mtime">${m.time}${m.me?' · ✓✓':''}</div>
+      </div>
+    </div>`);
+  });
+  msgs.scrollTop=msgs.scrollHeight;
+  buildShareFileList();
+  document.getElementById('chat-win').classList.add('open');
+}
+function closeChatWin(){document.getElementById('chat-win').classList.remove('open');curChat=null}
+function sendMsg(){
+  const inp=document.getElementById('cinput');const text=inp.value.trim();if(!text)return;
+  const msgs=document.getElementById('cmsgs');
+  msgs.insertAdjacentHTML('beforeend',`<div class="mrow me"><div style="display:flex;flex-direction:column;align-items:flex-end"><div class="mbubble">${text}</div><div class="mtime">Now · ✓</div></div></div>`);
+  inp.value='';msgs.scrollTop=msgs.scrollHeight;
+  if(curChat&&!chatData.find(x=>x.id===curChat)?.grp){
+    const c=chatData.find(x=>x.id===curChat);
+    setTimeout(()=>{
+      const replies=['Got it!','Sure!','Thanks.','👍','Will get back to you.'];
+      msgs.insertAdjacentHTML('beforeend',`<div class="mrow"><div class="mav">${c?.av||'👤'}</div><div><div class="mbubble">${replies[Math.floor(Math.random()*replies.length)]}</div><div class="mtime">Just now</div></div></div>`);
+      msgs.scrollTop=msgs.scrollHeight;
+    },1200);
+  }
+}
+function buildShareFileList(){
+  const items=[{ic:'📕',n:'Unit 3 – Trees.pdf'},{ic:'📙',n:'Process Scheduling.pptx'},{ic:'🎬',n:'ML Tutorial.mp4'},{ic:'📘',n:'Lab Manual.docx'}];
+  document.getElementById('share-file-list').innerHTML=items.map(i=>`<div class="mcard" style="margin-bottom:7px" onclick="shareFile('${i.n}')"><div class="micon mdoc">${i.ic}</div><div class="minfo"><div class="mtitle">${i.n}</div><div class="mmeta">Tap to share</div></div></div>`).join('');
+}
+function shareFile(name){
+  closeM('shareFM');
+  const msgs=document.getElementById('cmsgs');
+  msgs.insertAdjacentHTML('beforeend',`<div class="mrow me"><div style="display:flex;flex-direction:column;align-items:flex-end"><div class="mbubble"><div class="mfile">📎 ${name}</div></div><div class="mtime">Now · ✓</div></div></div>`);
+  msgs.scrollTop=msgs.scrollHeight;toast('📎 File shared!');
+}
+
+// ══════════════════════════════════════
+// MODALS
+// ══════════════════════════════════════
+function openM(id){document.getElementById(id).classList.add('open')}
+function closeM(id){document.getElementById(id).classList.remove('open')}
+function closeMBG(e,id){if(e.target.classList.contains('movl'))closeM(id)}
+
+// ══════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════
+function toast(msg){
+  const t=document.createElement('div');
+  t.style.cssText='position:absolute;bottom:88px;left:50%;transform:translateX(-50%);background:rgba(15,30,60,.97);border:1px solid rgba(100,160,255,.2);color:#e8f0ff;padding:9px 17px;border-radius:22px;font-size:12.5px;font-weight:600;z-index:9999;white-space:nowrap;box-shadow:0 8px 26px rgba(0,0,0,.4);animation:fiu .3s ease both';
+  t.textContent=msg;document.getElementById('app').appendChild(t);
+  setTimeout(()=>t.remove(),2600);
+}
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+// Seed sample data if empty
+if(DB.courses.length===0){
+  DB.courses=[
+    {id:'seed1',name:'Data Structures & Algorithms',code:'CS401',sem:'Sem V · Section A',room:'Lab 204',icon:'💻',
+      students:[
+        {id:'s1',name:'Arjun Verma',roll:'2210001',email:'arjun@rimt.edu',s:'none'},
+        {id:'s2',name:'Priya Singh',roll:'2210002',email:'priya@rimt.edu',s:'none'},
+        {id:'s3',name:'Rahul Gupta',roll:'2210003',email:'',s:'none'},
+        {id:'s4',name:'Sneha Patel',roll:'2210004',email:'',s:'none'},
+        {id:'s5',name:'Vikram Kumar',roll:'2210005',email:'',s:'none'},
+      ],
+      attendance:{
+        L1:[{id:'s1',name:'Arjun Verma',roll:'2210001',s:'P'},{id:'s2',name:'Priya Singh',roll:'2210002',s:'P'},{id:'s3',name:'Rahul Gupta',roll:'2210003',s:'A'},{id:'s4',name:'Sneha Patel',roll:'2210004',s:'P'},{id:'s5',name:'Vikram Kumar',roll:'2210005',s:'P'}],
+        L2:[{id:'s1',name:'Arjun Verma',roll:'2210001',s:'P'},{id:'s2',name:'Priya Singh',roll:'2210002',s:'A'},{id:'s3',name:'Rahul Gupta',roll:'2210003',s:'P'},{id:'s4',name:'Sneha Patel',roll:'2210004',s:'P'},{id:'s5',name:'Vikram Kumar',roll:'2210005',s:'P'}],
+      },
+      courseNotes:[{id:'cn1',title:'Chapter 3 Plan',body:'Cover AVL rotations next class. Students struggled with deletion. Assign practice from chapter 5.',date:'Mar 30'}]
+    },
+    {id:'seed2',name:'Operating Systems',code:'CS403',sem:'Sem V · Section B',room:'Room 101',icon:'⚡',
+      students:[
+        {id:'s6',name:'Sanjay Dubey',roll:'2210101',email:'',s:'none'},
+        {id:'s7',name:'Kavita Rani',roll:'2210102',email:'',s:'none'},
+        {id:'s8',name:'Rohit Mishra',roll:'2210103',email:'',s:'none'},
+      ],
+      attendance:{
+        L1:[{id:'s6',name:'Sanjay Dubey',roll:'2210101',s:'P'},{id:'s7',name:'Kavita Rani',roll:'2210102',s:'A'},{id:'s8',name:'Rohit Mishra',roll:'2210103',s:'P'}],
+      },
+      courseNotes:[]
+    },
+  ];
+  save();
+}
+updateMatCourseDropdown();
+renderNotes(DB.notes);
+</script>
+</body>
+</html>
