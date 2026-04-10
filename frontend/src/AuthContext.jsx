@@ -20,8 +20,8 @@ export function AuthProvider({ children }) {
 
   useEffect(() => { checkSession(); }, [checkSession]);
 
-  const login = async (email, password) => {
-    const data = await api.post('/auth/login', { email, password });
+  const login = async (email, password, remember = false) => {
+    const data = await api.post('/auth/login', { email, password, remember });
     setTeacher(data.teacher);
     return data.teacher;
   };

@@ -10,6 +10,7 @@ export default function LoginScreen({ onSwitch }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPw, setShowPw] = useState(false);
+  const [remember, setRemember] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
@@ -27,7 +28,7 @@ export default function LoginScreen({ onSwitch }) {
     if (!validate()) return;
     setLoading(true);
     try {
-      await login(email.trim(), password);
+      await login(email.trim(), password, remember);
       toast('✅ Welcome back!', 'success');
     } catch (err) {
       toast('❌ ' + (err.message || 'Login failed'), 'error');
@@ -89,7 +90,7 @@ export default function LoginScreen({ onSwitch }) {
           </div>
 
           <div style={{display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, fontSize: 13, color: 'var(--text2)'}}>
-            <input type="checkbox" id="rememberMe" style={{cursor: 'pointer'}} />
+            <input type="checkbox" id="rememberMe" checked={remember} onChange={e => setRemember(e.target.checked)} style={{cursor: 'pointer'}} />
             <label htmlFor="rememberMe" style={{cursor: 'pointer'}}>Remember Me</label>
           </div>
 

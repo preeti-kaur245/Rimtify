@@ -12,7 +12,7 @@ db.version(1).stores({
 });
 
 const getTeacher = () => {
-  const t = localStorage.getItem('teacherId');
+  const t = localStorage.getItem('teacherId') || sessionStorage.getItem('teacherId');
   if (!t) throw new Error('Not authenticated');
   return parseInt(t);
 };
@@ -24,6 +24,15 @@ export const localDb = {
       const t = await db.teachers.get(tid);
       if (!t) throw new Error('Not authenticated');
       return t;
+    }
+    if (path === '/auth/me') {
+      const t = await db.teachers.get(tid);
+      if (!t) {
+        localStorage.removeItem('teacherId');
+        sessionStorage.removeItem('teacherId');
+        throw new Error('Not authenticated');
+      }
+      return { teacher: t };
     }
     if (path === '/courses') {
       return (await db.courses.where({ teacher_id: tid }).toArray())
@@ -83,11 +92,19 @@ export const localDb = {
     if (path === '/auth/login') {
       const t = await db.teachers.where({ email: body.email }).first();
       if (!t || t.password !== body.password) throw new Error('Invalid credentials');
-      localStorage.setItem('teacherId', t.id.toString());
+      
+      if (body.remember) {
+        localStorage.setItem('teacherId', t.id.toString());
+        sessionStorage.removeItem('teacherId');
+      } else {
+        sessionStorage.setItem('teacherId', t.id.toString());
+        localStorage.removeItem('teacherId');
+      }
       return { success: true, teacher: t };
     }
     if (path === '/auth/logout') {
       localStorage.removeItem('teacherId');
+      sessionStorage.removeItem('teacherId');
       return { success: true };
     }
     
