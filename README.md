@@ -1,26 +1,140 @@
-# Rimtify – Faculty Portal
+RIMTIFY-"RIMT Faculty Management System"
+A full-stack web application built to simplify faculty workflows inside a university environment. This system allows teachers to manage attendance, upload study materials, create notes, and maintain structured student records based on courses.
 
-This folder (`rimtify project rimt`) contains the complete source code for the Rimtify Faculty Portal, featuring a secure backend with SQLite and a modern React frontend.
+#Features
+- Faculty Authentication (Login/Register)
+- Attendance Management System
+- Upload & Manage Study Materials
+- Create and Save Notes
+- Course-wise Student Data Management
+- File Storage for Faculty Uploads
+- Lightweight Local Database (SQLite)
 
-## Directory Structure
-- `/backend` - Node.js Express server and API endpoints (`auth.js`, `data.js`, `materials.js`).
-- `/frontend` - React Vite application containing all the UI screens, components, and styling.
-- `/uploads` - Directory where faculty files are stored.
-- `rimtify.sqlite` - Local SQLite database.
-- `rimtify_original_prototype.html` - The original HTML prototype you provided.
+# Tech Stack
+### Backend
+- Node.js
+- Express.js
+- REST API Architecture
 
-## How to Run the Project
+### Frontend
+- React (Vite)
+- HTML5
+- CSS3
+- JavaScript
 
-### 1. Start the Backend Server
-1. Open a terminal inside the main folder (`rimtify project rimt`).
-2. Run `npm install` (only needed the first time).
-3. Run `npm run dev`.
-4. The backend server will start on `http://localhost:5000`.
+### Database
+- SQLite (Local Database)
 
-### 2. Start the Frontend App
-1. Open a **second** terminal window.
-2. Navigate to the frontend folder: `cd frontend`
-3. Run `npm install` (only needed the first time).
-4. Run `npm run dev`
-5. The Vite server will start, and give you a link (usually `http://localhost:5173` or `http://localhost:3000`).
-6. Click the link to open the app in your browser!
+# Project Structure
+
+```
+project-root/
+
+├── backend/
+│   ├── auth.js        # Authentication APIs (login/register)
+│   ├── data.js        # Student & course data handling
+│   ├── materials.js   # Material upload & retrieval APIs
+│   └── server.js      # Main Express server
+
+├── frontend/
+│   ├── src/
+│   ├── index.html
+│   └── vite.config.js
+
+├── uploads/           # Stores uploaded faculty files
+
+├── rimtify.sqlite     # SQLite database file
+
+└── README.md
+```
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/preeti-kaur245/Rimtify
+cd rimtify-project-rimt
+```
+
+### 2. Backend Setup
+```bash
+cd backend
+npm install
+node server.js
+```
+
+### 3. Frontend Setup
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+---
+
+## 🔐 API Overview
+
+### Auth Routes (`auth.js`)
+- POST `/login` → Authenticate faculty
+- POST `/register` → Create new faculty account
+
+### Data Routes (`data.js`)
+- GET `/students` → Fetch student list
+- POST `/students` → Add new student
+- GET `/attendance` → View attendance
+- POST `/attendance` → Mark attendance
+
+### Materials Routes (`materials.js`)
+- POST `/upload` → Upload files
+- GET `/materials` → Retrieve uploaded materials
+
+---
+
+## 💾 Database
+
+- Uses SQLite for simplicity and local storage.
+- File: `rimtify.sqlite`
+- Stores:
+  - Faculty credentials
+  - Student records
+  - Attendance data
+  - Uploaded material metadata
+
+---
+
+## 📌 Use Case
+
+- University faculty to reduce manual work
+- Easy digital record management
+- Organized course-wise student tracking
+- Centralized academic resource sharing
+
+---
+
+## ⚠️ Limitations
+
+- Not scalable for production (SQLite + local uploads)
+- Basic authentication (no advanced security)
+- No role-based access control
+- UI may need improvements
+
+---
+
+## 🔧 Future Improvements
+
+- Add JWT authentication
+- Use cloud storage (AWS S3 / Firebase)
+- Upgrade database (PostgreSQL / MongoDB)
+- Add admin roles
+- Improve UI/UX
+- Deploy the application
+
+---
+## 📄 License
+This project is open-source and available under the MIT License.
+
+## 👤 Author
+Developed by MANPREET KAUR- BCA AI/ML (RIMT University)
+
