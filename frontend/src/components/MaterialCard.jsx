@@ -1,3 +1,4 @@
+import { api } from '../api';
 import './MaterialCard.css';
 
 const FILE_ICONS = { pdf: '📕', pptx: '📙', docx: '📘', mp4: '🎬', other: '📄' };
@@ -20,9 +21,7 @@ export default function MaterialCard({ material: m, onDelete }) {
   const fmtDate = (dt) => new Date(dt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' });
 
   const handleDownload = () => {
-    const link = document.createElement('a');
-    link.href = `/api/materials/${m.id}/download`;
-    link.click();
+    api.download(m.id);
   };
 
   return (
