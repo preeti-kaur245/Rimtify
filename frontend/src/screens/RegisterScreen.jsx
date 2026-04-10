@@ -3,6 +3,8 @@ import { useAuth } from '../AuthContext';
 import { useToast } from '../ToastContext';
 import './AuthScreens.css';
 
+import myLogo from '../assets/logo.jpeg';
+
 const DEPT_OPTIONS = ['Computer Science & Engineering', 'Electronics & Communication', 'Mechanical Engineering', 'Civil Engineering', 'Mathematics', 'Physics', 'Chemistry', 'Commerce', 'Management', 'Law', 'Other'];
 
 export default function RegisterScreen({ onSwitch }) {
@@ -55,7 +57,7 @@ export default function RegisterScreen({ onSwitch }) {
       <div className="auth-box auth-box-wide fade-up">
         <div className="auth-brand">
           <div className="auth-logo">
-            <span style={{ fontSize: 28 }}>🎓</span>
+            <img src={myLogo} alt="Logo" style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'contain' }} />
           </div>
           <div>
             <div className="auth-brand-name">Faculty Portal</div>
