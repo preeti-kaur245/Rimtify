@@ -15,14 +15,18 @@ export function ToastProvider({ children }) {
     setToasts(prev => [...prev, { id, msg, type }]);
     
     if ('Notification' in window && Notification.permission === 'granted' && (type === 'success' || type === 'error')) {
-      const n = new Notification(type === 'success' ? '✅ Success' : '❌ Error', {
-        body: msg.replace(/^[^\w]+/, '').trim(),
-        silent: true
-      });
-      setTimeout(() => n.close(), 1500);
+      try {
+        const n = new Notification(type === 'success' ? '✅ Success' : '❌ Error', {
+          body: msg.replace(/^[^\w]+/, '').trim(),
+          silent: true
+        });
+        setTimeout(() => n.close(), 2500);
+      } catch (err) {
+        // Ignored. "Illegal constructor" error happens on Android Chrome where Notifications require Service Workers
+      }
     }
 
-    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 1500);
+    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 2500);
   }, []);
 
   return (
