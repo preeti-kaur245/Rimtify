@@ -11,8 +11,13 @@ export const api = {
     if (path === '/auth/me' || path === '/auth/profile') {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) throw new Error('Not authenticated');
-      const { data: t } = await supabase.from('teachers').select('*').eq('id', session.user.id).single();
-      if (!t) throw new Error('Not authenticated');
+      let { data: t } = await supabase.from('teachers').select('*').eq('id', session.user.id).maybeSingle();
+      if (!t) {
+        // Auto-heal ghost account on page reload
+        const fallbackTeacher = { id: session.user.id, name: session.user.email.split('@')[0], email: session.user.email, dept: 'Not Specified', role: 'Faculty', univ: 'Rimtify', initials: session.user.email.substring(0, 2).toUpperCase(), tutorial_done: 0 };
+        await supabase.from('teachers').insert(fallbackTeacher);
+        t = fallbackTeacher;
+      }
       return path === '/auth/profile' ? t : { teacher: t };
     }
     
@@ -81,8 +86,26 @@ export const api = {
     if (path === '/auth/login') {
       const { data, error } = await supabase.auth.signInWithPassword({ email: body.email, password: body.password });
       if (error) throw error;
-      const { data: t, error: tErr } = await supabase.from('teachers').select('*').eq('id', data.user.id).single();
-      if (tErr) throw tErr;
+      
+      let { data: t, error: tErr } = await supabase.from('teachers').select('*').eq('id', data.user.id).maybeSingle();
+      
+      if (!t) {
+        // Auto-heal ghost account by generating the missing teacher profile
+        const fallbackTeacher = {
+          id: data.user.id,
+          name: body.email.split('@')[0],
+          email: body.email,
+          dept: 'Not Specified',
+          role: 'Faculty',
+          univ: 'Rimtify',
+          initials: body.email.substring(0, 2).toUpperCase(),
+          tutorial_done: 0
+        };
+        await supabase.from('teachers').insert(fallbackTeacher);
+        t = fallbackTeacher;
+      } else if (tErr) {
+        throw tErr;
+      }
       return { success: true, teacher: t };
     }
     if (path === '/auth/logout') {
