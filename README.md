@@ -1,6 +1,6 @@
 RIMTIFY-"RIMT Faculty Management System"
 A full-stack web application built to simplify faculty workflows inside a university environment. This system allows teachers to manage attendance, upload study materials, create notes, and maintain structured student records based on courses.
-
+MAIN ACCESS: https://preeti-kaur245.github.io/Rimtify/
 #Features
 - Faculty Authentication (Login/Register)
 - Attendance Management System
