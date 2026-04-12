@@ -1,136 +1,127 @@
-"RIMTIFY – Faculty Management System (Web + Android APK)"
+--RIMTIFY – Faculty Management System (Web + Android APK)--
 
-RIMTIFY is a full-stack faculty management system designed to simplify academic workflows inside universities. It allows teachers to manage attendance, student records, study materials, and notes in one centralized platform.
-
-____________
+RIMTIFY is a full-stack faculty productivity system designed to simplify academic workflows in universities. It allows teachers to manage attendance, student records, study materials, and notes with real-time syncing across devices.
 
 🔗 Live App: https://preeti-kaur245.github.io/Rimtify/
 
 📱 Download Android APK: https://median.co/share/nmjnmkq#apk
-___________
 
 ⚡ Features
-🔐 Authentication
-Faculty Login / Registration
+🔐 Authentication (Supabase)
+-Secure faculty login & registration
+-Session management across devices
 📊 Attendance Management
-Mark attendance per course
-Store attendance records
-View attendance history
+-Mark attendance per course
+-Persistent cloud storage
+-Real-time sync across devices
 📅 Multi-Day Attendance Export
-Export attendance for last N days
-Fetch historical data from database
-Sorted by date
+-Export attendance for last N days
+-Fetch historical data from database
+-Sorted and structured output
 📥 CSV Report Generation
-Proper comma-separated format
-UTF-8 with BOM (Excel compatible)
-Handles special characters and commas
+-Proper comma-separated format
+-UTF-8 with BOM (Excel compatible)
+-Handles special characters and commas
 Clean column structure:
 Date, Student Name, Student ID, Course, Attendance Status
+
+
 📂 File Download
-Auto-download as: attendance_report.csv
-Works in Excel, Google Sheets, etc.
-📁 Study Materials
-Upload PDFs, images, and files
-Retrieve and manage uploaded content
+-Auto-download as: attendance_report.csv
+-Works in Excel, Google Sheets, etc.
+📁 Study Materials (Cloud Storage)
+-Upload PDFs, images, files
+-Stored securely using Supabase Storage
+-Accessible across devices
 📝 Notes System
-Create and save notes for teaching
+-Create and save teaching notes
+-Cloud-synced data
 🎓 Student Management
-Course-wise student records
-Add and manage student data
+-Course-wise student records
+-Centralized database (Supabase)
 
 
 🛠 Tech Stack
-Backend
-Node.js
-Express.js
-REST API
-Frontend
+~Frontend
 React (Vite)
 HTML5, CSS3, JavaScript
-Database
-SQLite (local database)
+~Backend / BaaS
+Supabase
+PostgreSQL Database
+~Authentication
 Storage
-Local file system (/uploads)
+API Layer
+Supabase client (REST + Realtime)
 
 
 📁 Project Structure
 project-root/
-
-├── backend/
-│   ├── auth.js
-│   ├── data.js
-│   ├── materials.js
-│   └── server.js
 
 ├── frontend/
 │   ├── src/
 │   ├── index.html
 │   └── vite.config.js
 
-├── uploads/
-├── rimtify.sqlite
+├── supabase/
+│   └── config (optional)
+
 └── README.md
 
 
-⚙️ Installation & Setup
+⚙️ Setup
 1. Clone Repository
 git clone https://github.com/preeti-kaur245/Rimtify
 cd rimtify-project-rimt
-2. Backend Setup
-cd backend
-npm install
-node server.js
-3. Frontend Setup
+2. Setup Environment Variables
+
+Create a .env file inside frontend/:
+
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_anon_key
+3. Run Frontend
 cd frontend
 npm install
 npm run dev
+🗄 Database (Supabase - PostgreSQL)
 
 
-🔌 API Overview
-Auth Routes
-POST /login → Login faculty
-POST /register → Register faculty
-Student & Attendance
-GET /students → Get students
-POST /students → Add student
-GET /attendance → Get attendance
-POST /attendance → Mark attendance
-Materials
-POST /upload → Upload file
-GET /materials → Get uploaded files
-💾 Database
-SQLite database (rimtify.sqlite)
 Stores:
-Faculty credentials
+
+Faculty authentication data
 Student records
-Attendance data
+Attendance history
+Notes
 Material metadata
-
-
+☁️ Storage
+Supabase Storage buckets
+Used for:
+Study materials
+Uploaded files
 🎯 Use Cases
 Replace manual attendance registers
-Manage student records digitally
-Store and share study materials
-Maintain organized academic data
+Real-time faculty data sync across devices
+Centralized academic resource management
+Automated reporting for audits
 
-
-⚠️ Limitations
-Not scalable for production (SQLite + local storage)
-Basic authentication (no JWT)
-No role-based access control
+⚠️ Current Limitations
+Still not perfect. Be honest:
+No advanced role-based access (Admin/Student)
+Limited analytics/dashboard
 UI can be improved
+No payment system (not SaaS-ready yet)
 
 
 🔧 Future Improvements
-Add JWT authentication
-Use cloud database (PostgreSQL / Supabase)
-Integrate cloud storage (AWS S3 / Firebase)
-Add admin roles and dashboards
-Improve UI/UX
+Add role-based access control (RBAC)
+Admin dashboard for institutions
+Analytics (attendance insights)
+Payment integration (Razorpay/Stripe)
+Multi-tenant architecture (per college)
+Full deployment (custom domain + backend services)
 
-👤 AUTHOR 
+👤 Author
 Manpreet Kaur
 BCA AI/ML – RIMT University
 
 📄 License
-MIT License-2026 
+MIT License
