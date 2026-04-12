@@ -1,6 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
+const { Parser } = require('json2csv');
+const { createClient } = require('@supabase/supabase-js');
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+);
 
 function auth(req, res, next) {
   if (!req.session.teacherId) return res.status(401).json({ error: 'Not authenticated' });
@@ -93,10 +100,12 @@ router.get('/courses/:courseId/attendance', auth, (req, res) => {
 });
 
 router.post('/courses/:courseId/attendance', auth, (req, res) => {
-  const { lecture_no, records, note } = req.body;
+  const { lecture_no, records, note, date: customDate } = req.body;
   if (!records) return res.status(400).json({ error: 'Records required' });
-  const date = new Date().toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' });
-  db.run(`DELETE FROM attendance WHERE course_id=? AND lecture_no=?`, [req.params.courseId, lecture_no], () => {
+  
+  const date = customDate || new Date().toISOString().split('T')[0];
+  
+  db.run(`DELETE FROM attendance WHERE course_id=? AND lecture_no=? AND date=?`, [req.params.courseId, lecture_no, date], () => {
     const stmt = db.prepare(`INSERT INTO attendance (course_id, student_id, lecture_no, status, note, date) VALUES (?,?,?,?,?,?)`);
     records.forEach(r => stmt.run([req.params.courseId, r.student_id, lecture_no, r.status, note || '', date]));
     stmt.finalize();
@@ -140,6 +149,66 @@ router.delete('/notes/:id', auth, (req, res) => {
       if (err) return res.status(500).json({ error: err.message });
       res.json({ success: true });
     });
+});
+
+// ── EXPORT (SUPABASE) ────────────────────────────────────
+router.get('/export-attendance', auth, async (req, res) => {
+  try {
+    const { days = 7 } = req.query;
+
+    const fromDate = new Date();
+    fromDate.setDate(fromDate.getDate() - parseInt(days));
+    const formattedDate = fromDate.toISOString().split("T")[0];
+
+    // Fetch data from Supabase
+    const { data, error } = await supabase
+      .from("attendance")
+      .select(`
+        date,
+        status,
+        note,
+        lecture_no,
+        students ( name, roll ),
+        courses ( name )
+      `)
+      .gte("date", formattedDate)
+      .order("date", { ascending: false });
+
+    if (error) throw error;
+    if (!data || data.length === 0) return res.status(404).send("No attendance data found");
+
+    const records = data.map((item) => ({
+      date: item.date,
+      student_name: item.students?.name,
+      student_roll: item.students?.roll || 'N/A',
+      course: item.courses?.name,
+      lecture: `L${item.lecture_no}`,
+      status: item.status === 'P' ? 'Present' : item.status === 'A' ? 'Absent' : 'Unmarked',
+      note: item.note || ''
+    }));
+
+    const fields = [
+      { label: "Date", value: "date" },
+      { label: "Student Name", value: "student_name" },
+      { label: "Roll No", value: "student_roll" },
+      { label: "Course", value: "course" },
+      { label: "Lecture", value: "lecture" },
+      { label: "Attendance Status", value: "status" },
+      { label: "Note", value: "note" }
+    ];
+
+    const parser = new Parser({ fields });
+    let csv = parser.parse(records);
+    csv = "\uFEFF" + csv;
+
+    res.header("Content-Type", "text/csv; charset=utf-8");
+    res.attachment(`Attendance_Report_${days}_Days.csv`);
+    return res.send(csv);
+
+  } catch (err) {
+    console.error('Export Error:', err);
+    res.status(500).send("Export failed: " + err.message);
+  }
 });
 
 // ── STATS ─────────────────────────────────────────────────

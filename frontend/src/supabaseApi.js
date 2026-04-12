@@ -126,11 +126,11 @@ export const api = {
     }
     if (path.match(/^\/courses\/(\d+)\/attendance$/)) {
       const cid = parseInt(path.match(/^\/courses\/(\d+)\/attendance$/)[1]);
-      const date = new Date().toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' });
-      const { lecture_no, records, note } = body;
+      const { lecture_no, records, note, date: customDate } = body;
+      const date = customDate || new Date().toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' });
       
-      // Delete old attendance for this lecture
-      await supabase.from('attendance').delete().match({ course_id: cid, lecture_no });
+      // Delete old attendance for this lecture ON THIS DATE
+      await supabase.from('attendance').delete().match({ course_id: cid, lecture_no, date });
       
       const toAdd = records.map(r => ({
         course_id: cid, student_id: r.student_id, lecture_no: lecture_no, status: r.status, note: note || '', date

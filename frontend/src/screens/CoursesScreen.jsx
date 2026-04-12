@@ -89,13 +89,14 @@ export default function CoursesScreen() {
   const [editStudent, setEditStudent] = useState(null);
   const [showAddStudent, setShowAddStudent] = useState(false);
   const [activeTab, setActiveTab] = useState('students');
-  const [attData, setAttData] = useState({});
+  const [attData, setAttData] = useState({}); // { 'Date': { 1: {sid: status}, 2: {} } }
   const [attSession, setAttSession] = useState({});
   const [currentLec, setCurrentLec] = useState(1);
+  const [selectedDate, setSelectedDate] = useState(new Date().toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' }));
   const [attNote, setAttNote] = useState('');
   const [searchStudent, setSearchStudent] = useState('');
-  const [lecDates, setLecDates] = useState({});
-  const [lecNotes, setLecNotes] = useState({});
+  const [lecNotes, setLecNotes] = useState({}); // { 'Date-Lec': 'Note' }
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
   const loadCourses = async () => {
     try { const c = await api.get('/courses'); setCourses(c); }
@@ -104,27 +105,59 @@ export default function CoursesScreen() {
   };
   useEffect(() => { loadCourses(); }, []);
 
+  const formatDate = (date) => {
+    // Returns YYYY-MM-DD
+    const d = new Date(date);
+    const month = '' + (d.getMonth() + 1);
+    const day = '' + d.getDate();
+    const year = d.getFullYear();
+    return [year, month.padStart(2, '0'), day.padStart(2, '0')].join('-');
+  };
+
+  const displayDate = (dateStr) => {
+    // Converts YYYY-MM-DD to "12 Apr 2026"
+    if (!dateStr) return '';
+    const [y, m, d] = dateStr.split('-');
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${d} ${months[parseInt(m)-1]} ${y}`;
+  };
+
   const loadStudents = async (cid) => {
     const [sts, att] = await Promise.all([api.get(`/courses/${cid}/students`), api.get(`/courses/${cid}/attendance`)]);
     setStudents(sts);
-    const grouped = {};
-    const dts = {};
+    
+    const grouped = {}; // { date: { lec_no: { student_id: status } } }
     const nts = {};
     att.forEach(a => {
-      if (!grouped[a.lecture_no]) grouped[a.lecture_no] = {};
-      grouped[a.lecture_no][a.student_id] = a.status;
-      dts[a.lecture_no] = a.date;
-      nts[a.lecture_no] = a.note;
+      // Normalize date to YYYY-MM-DD if it's in display format
+      let dKey = a.date;
+      if (a.date.match(/[a-zA-Z]/)) { // "12 Apr 2026" -> "2026-04-12"
+         const d = new Date(a.date);
+         dKey = formatDate(d);
+      }
+
+      if (!grouped[dKey]) grouped[dKey] = {};
+      if (!grouped[dKey][a.lecture_no]) grouped[dKey][a.lecture_no] = {};
+      grouped[dKey][a.lecture_no][a.student_id] = a.status;
+      nts[`${dKey}-${a.lecture_no}`] = a.note;
     });
+
     setAttData(grouped);
-    setLecDates(dts);
     setLecNotes(nts);
-    const maxLec = Math.max(1, ...Object.keys(grouped).map(Number));
-    const nextLec = Object.keys(grouped).length === 0 ? 1 : maxLec + 1;
+
+    const today = formatDate(new Date());
+    setSelectedDate(today);
+    
+    // Find next available lecture for today
+    const todaysLecs = grouped[today] || {};
+    const maxLec = Math.max(0, ...Object.keys(todaysLecs).map(Number));
+    const nextLec = maxLec < 8 ? maxLec + 1 : 1;
     setCurrentLec(nextLec);
+
     const sess = {};
-    sts.forEach(s => { sess[s.id] = grouped[nextLec]?.[s.id] || 'none'; });
+    sts.forEach(s => { sess[s.id] = todaysLecs[nextLec]?.[s.id] || 'none'; });
     setAttSession(sess);
+    setAttNote(nts[`${today}-${nextLec}`] || '');
   };
 
   const openCourseDetail = (c) => {
@@ -151,14 +184,19 @@ export default function CoursesScreen() {
     } catch (e) { toast('❌ ' + e.message, 'error'); }
   };
 
-  const deleteCourse = async (id) => {
-    if (!confirm('Delete this course and all data?')) return;
+  const handleDeleteCourse = async (id, e) => {
+    if (e) e.stopPropagation();
+    console.log("Delete triggered for course:", id);
     try {
       await api.del(`/courses/${id}`);
       setCourses(prev => prev.filter(c => c.id !== id));
       setOpenCourse(null);
-      toast('🗑️ Course deleted', 'success');
-    } catch (e) { toast('❌ ' + e.message, 'error'); }
+      setShowConfirmDelete(false);
+      toast('🗑️ Course deleted successfully', 'success');
+    } catch (err) {
+      toast('❌ Error deleting course', 'error');
+      console.error(err);
+    }
   };
 
   const saveStudent = async (form) => {
@@ -198,48 +236,110 @@ export default function CoursesScreen() {
   const selectLec = (n) => {
     setCurrentLec(n);
     const sess = {};
-    students.forEach(s => { sess[s.id] = attData[n]?.[s.id] || 'none'; });
+    const dayData = attData[selectedDate] || {};
+    students.forEach(s => { sess[s.id] = dayData[n]?.[s.id] || 'none'; });
     setAttSession(sess);
+    setAttNote(lecNotes[`${selectedDate}-${n}`] || '');
+  };
+
+  const changeDate = (dateStr) => {
+    // dateStr is already YYYY-MM-DD from input
+    setSelectedDate(dateStr);
+    const dayData = attData[dateStr] || {};
+    const sess = {};
+    students.forEach(s => { sess[s.id] = dayData[currentLec]?.[s.id] || 'none'; });
+    setAttSession(sess);
+    setAttNote(lecNotes[`${dateStr}-${currentLec}`] || '');
   };
 
   const saveAttendance = async () => {
     const records = students.map(s => ({ student_id: s.id, status: attSession[s.id] || 'none' }));
     try {
-      await api.post(`/courses/${openCourse.id}/attendance`, { lecture_no: currentLec, records, note: attNote });
+      await api.post(`/courses/${openCourse.id}/attendance`, { 
+        lecture_no: currentLec, 
+        records, 
+        note: attNote,
+        date: selectedDate
+      });
+
       setAttData(prev => {
         const updated = { ...prev };
-        updated[currentLec] = {};
-        students.forEach(s => { updated[currentLec][s.id] = attSession[s.id] || 'none'; });
+        if (!updated[selectedDate]) updated[selectedDate] = {};
+        updated[selectedDate][currentLec] = {};
+        students.forEach(s => { 
+          updated[selectedDate][currentLec][s.id] = attSession[s.id] || 'none'; 
+        });
         return updated;
       });
-      const today = new Date().toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' });
-      setLecDates(prev => ({ ...prev, [currentLec]: today }));
-      setLecNotes(prev => ({ ...prev, [currentLec]: attNote }));
+
+      setLecNotes(prev => ({ ...prev, [`${selectedDate}-${currentLec}`]: attNote }));
       
-      toast(`💾 Lecture ${currentLec} saved!`, 'success');
-      if (currentLec < 8) setCurrentLec(n => n + 1);
+      toast(`💾 Saved: ${displayDate(selectedDate)} - L${currentLec}`, 'success');
+      
+      // Auto-advance lecture only if it's today and we are marking new ones
+      const today = formatDate(new Date());
+      if (selectedDate === today && currentLec < 8 && !attData[selectedDate]?.[currentLec]) {
+         setCurrentLec(n => n + 1);
+      }
     } catch (e) { toast('❌ ' + e.message, 'error'); }
   };
 
   const exportCSV = () => {
     if (students.length === 0) return toast('No students to export', 'error');
-    const lecs = Object.keys(attData).sort((a,b) => a-b);
-    let csv = 'Roll No,Name,' + lecs.map(l => `Lecture ${l}`).join(',') + '\n';
-    students.forEach(s => {
-      let row = `"${s.roll || ''}","${s.name}"`;
-      lecs.forEach(l => {
-        row += `,${attData[l][s.id] || 'none'}`;
+    if (Object.keys(attData).length === 0) return toast('No attendance data yet', 'error');
+    
+    // Headers as per requirements
+    const headers = ['Date', 'Student Name', 'Student ID', 'Course', 'Attendance Status', 'Lecture', 'Note'];
+    let csvContent = headers.map(h => `"${h}"`).join(',') + '\r\n';
+    
+    // Sort dates ascending
+    const sortedDates = Object.keys(attData).sort((a,b) => new Date(a) - new Date(b));
+    
+    sortedDates.forEach(date => {
+      const lecs = Object.keys(attData[date]).sort((a,b) => a-b);
+      lecs.forEach(lec => {
+        const rec = attData[date][lec];
+        const note = (lecNotes[`${date}-${lec}`] || '').replace(/"/g, '""');
+        const displayD = displayDate(date);
+        
+        students.forEach(s => {
+          const status = rec[s.id] || 'none';
+          const statusText = status === 'P' ? 'Present' : status === 'A' ? 'Absent' : 'Unmarked';
+          
+          const row = [
+            displayD,
+            s.name,
+            s.roll || 'N/A',
+            openCourse.name,
+            statusText,
+            `L${lec}`,
+            note
+          ];
+          
+          csvContent += row.map(val => `"${(val || '').toString().replace(/"/g, '""')}"`).join(',') + '\r\n';
+        });
       });
-      csv += row + '\n';
     });
-    const blob = new Blob([csv], { type: 'text/csv' });
+
+    // Create Blob with BOM for Excel (UTF-8)
+    const BOM = new Uint8Array([0xEF, 0xBB, 0xBF]);
+    const blob = new Blob([BOM, csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
+    
     const a = document.createElement('a');
+    a.style.display = 'none';
     a.href = url;
-    a.download = `${openCourse.name}_Attendance.csv`;
+    a.download = `${openCourse.name.replace(/\s+/g, '_')}_Attendance_Report.csv`;
+    
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
-    toast('⬇️ CSV Exported successfully!', 'success');
+    
+    setTimeout(() => {
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }, 200);
+    
+    toast('📊 Attendance Report Downloaded', 'success');
   };
 
   const filteredStudents = students.filter(s => 
@@ -299,8 +399,28 @@ export default function CoursesScreen() {
               <div style={{ fontSize: 11, color: 'var(--text3)' }}>{openCourse.code}{openCourse.semester ? ' · ' + openCourse.semester : ''}</div>
             </div>
             <button className="btn btn-icon btn-sm" onClick={() => setEditCourse(openCourse)}>✏️</button>
-            <button className="btn btn-sm" style={{ color: 'var(--red)', border: '1px solid rgba(239,68,68,.3)', background: 'rgba(239,68,68,.08)' }} onClick={() => deleteCourse(openCourse.id)}>🗑️</button>
+            <button 
+              className="btn btn-sm btn-outline-red" 
+              onClick={(e) => { e.stopPropagation(); setShowConfirmDelete(true); }}
+              title="Delete Course"
+            >
+              🗑️
+            </button>
           </div>
+
+          {showConfirmDelete && (
+            <div className="overlay" style={{ zIndex: 3000 }} onClick={() => setShowConfirmDelete(false)}>
+              <div className="modal" style={{ maxWidth: 320, textAlign: 'center' }} onClick={e => e.stopPropagation()}>
+                 <div style={{ fontSize: 48, marginBottom: 12 }}>🗑️</div>
+                 <h2 style={{ marginBottom: 8 }}>Delete Course?</h2>
+                 <p style={{ fontSize: 13, color: 'var(--text2)', marginBottom: 20 }}>Are you sure you want to delete <b>{openCourse.name}</b>? This will permanently remove all students and attendance data.</p>
+                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                    <button className="btn btn-secondary" onClick={() => setShowConfirmDelete(false)}>Cancel</button>
+                    <button className="btn" style={{ background: 'var(--red)', color: '#fff' }} onClick={(e) => handleDeleteCourse(openCourse.id, e)}>Delete</button>
+                 </div>
+              </div>
+            </div>
+          )}
 
           {/* Tabs */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border2)', marginBottom: 18 }}>
@@ -367,22 +487,48 @@ export default function CoursesScreen() {
           {/* Attendance Tab */}
           {activeTab === 'attendance' && (
             <div className="fade-in">
+              <div className="att-controls">
+                <div className="date-picker-wrap">
+                  <label>📅 Date</label>
+                  <input 
+                    type="date" 
+                    className="date-input" 
+                    value={selectedDate}
+                    onChange={e => changeDate(e.target.value)}
+                  />
+                </div>
+                <div className="session-indicator">
+                  <div className="si-label">Lecture</div>
+                  <div className="si-value">{currentLec}</div>
+                </div>
+              </div>
+
               <div className="att-note-box">
                 <span>📋</span>
                 <textarea className="att-note-input" placeholder="Lecture note / topic covered..." value={attNote} onChange={e => setAttNote(e.target.value)} rows={2} />
               </div>
-              <div className="section-label">Lecture Number</div>
+
+              <div className="section-label">Select Session (1-8)</div>
               <div className="lec-bar">
                 {[1,2,3,4,5,6,7,8].map(n => (
-                  <button key={n} className={`lec-btn ${currentLec === n ? 'active' : ''} ${attData[n] ? 'done' : ''}`} onClick={() => selectLec(n)}>L{n}</button>
+                  <button 
+                    key={n} 
+                    className={`lec-btn ${currentLec === n ? 'active' : ''} ${attData[selectedDate]?.[n] ? 'done' : ''}`} 
+                    onClick={() => selectLec(n)}
+                  >
+                    L{n}
+                  </button>
                 ))}
               </div>
+
               <div className="att-summary">
                 <div className="att-chip att-p"><div className="att-num">{pCnt}</div><div className="att-lbl">Present</div></div>
                 <div className="att-chip att-a"><div className="att-num">{aCnt}</div><div className="att-lbl">Absent</div></div>
-                <div className="att-chip att-n"><div className="att-num">{nCnt}</div><div className="att-lbl">Unmarked</div></div>
+                {nCnt > 0 && <div className="att-chip att-n"><div className="att-num">{nCnt}</div><div className="att-lbl">Unmarked</div></div>}
               </div>
-              <div className="tap-hint">👆 Tap once = Present · Tap again = Absent · Tap once more = Unmark</div>
+
+              <div className="tap-hint">👆 Tap row to toggle status: Present → Absent → Unmark</div>
+
               {students.length === 0 ? (
                 <div className="empty-state" style={{ padding: '30px 0' }}><p>Add students first from the Students tab.</p></div>
               ) : filteredStudents.length === 0 ? (
@@ -405,8 +551,8 @@ export default function CoursesScreen() {
                 </div>
               )}
               {students.length > 0 && (
-                <button className="btn btn-primary" style={{ width: '100%', marginTop: 16 }} onClick={saveAttendance}>
-                  💾 Save Lecture {currentLec} Attendance
+                <button className="btn btn-primary" style={{ width: '100%', marginTop: 20, height: 48, fontSize: 16 }} onClick={saveAttendance}>
+                  💾 Save Attendance
                 </button>
               )}
             </div>
@@ -419,33 +565,48 @@ export default function CoursesScreen() {
                 <div className="empty-state" style={{ padding: '36px 0' }}>
                   <div style={{ fontSize: 40 }}>📊</div>
                   <h3>No attendance records yet</h3>
+                  <p>Attendance records will appear here after you save them.</p>
                 </div>
               ) : (
-                <div className="stagger">
-                  {Object.keys(attData).sort((a,b) => a-b).map(lec => {
-                    const rec = attData[lec];
-                    const p = Object.values(rec).filter(v => v === 'P').length;
-                    const a = Object.values(rec).filter(v => v === 'A').length;
-                    return (
-                      <div key={lec} className="history-row" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 6 }}>
-                        <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <div style={{ fontWeight: 700, color: 'var(--blue2)' }}>
-                            Lecture {lec}
-                            {lecDates[lec] && <span style={{ color: 'var(--text3)', fontSize: 11, fontWeight: 400, marginLeft: 8 }}>({lecDates[lec]})</span>}
+                <div className="history-list stagger">
+                  {Object.keys(attData).sort((a,b) => new Date(b) - new Date(a)).map(date => (
+                    <div key={date} className="history-date-group">
+                      <div className="history-date-label">📅 {displayDate(date)}</div>
+                      {Object.keys(attData[date]).sort((a,b) => a-b).map(lec => {
+                        const rec = attData[date][lec];
+                        const p = Object.values(rec).filter(v => v === 'P').length;
+                        const a = Object.values(rec).filter(v => v === 'A').length;
+                        return (
+                          <div 
+                            key={lec} 
+                            className="history-row clickable" 
+                            onClick={() => {
+                              setSelectedDate(date);
+                              setCurrentLec(Number(lec));
+                              const sess = {};
+                              students.forEach(s => { sess[s.id] = rec[s.id] || 'none'; });
+                              setAttSession(sess);
+                              setAttNote(lecNotes[`${date}-${lec}`] || '');
+                              setActiveTab('attendance');
+                              toast(`✏️ Editing ${displayDate(date)} - L${lec}`, 'info');
+                            }}
+                          >
+                            <div className="h-left">
+                              <div className="h-lec-badge">L{lec}</div>
+                              <div className="h-stats">
+                                <span className="h-p">✓ {p}</span>
+                                <span className="h-a">✗ {a}</span>
+                              </div>
+                            </div>
+                            <div className="h-right">
+                              {lecNotes[`${date}-${lec}`] && <div className="h-note-preview">📋 {lecNotes[`${date}-${lec}`]}</div>}
+                              <span className="h-edit-icon">✏️</span>
+                            </div>
                           </div>
-                          <div style={{ display: 'flex', gap: 12 }}>
-                            <span style={{ color: 'var(--green)', fontWeight: 700 }}>✓ {p}</span>
-                            <span style={{ color: 'var(--red)', fontWeight: 700 }}>✗ {a}</span>
-                          </div>
-                        </div>
-                        {lecNotes[lec] && (
-                          <div style={{ fontSize: 12, color: 'var(--text2)', background: 'rgba(255,200,0,.08)', border: '1px solid rgba(255,200,0,.15)', padding: '5px 8px', borderRadius: 6, marginTop: 2, width: '100%' }}>
-                            📋 {lecNotes[lec]}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
+                        );
+                      })}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
