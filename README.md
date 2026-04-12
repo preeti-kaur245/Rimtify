@@ -1,145 +1,136 @@
-RIMTIFY-"RIMT Faculty Management System"
-A full-stack web application built to simplify faculty workflows inside a university environment. This system allows teachers to manage attendance, upload study materials, create notes, and maintain structured student records based on courses.
-____________________________
+"RIMTIFY – Faculty Management System (Web + Android APK)"
 
-MAIN ACCESS: https://preeti-kaur245.github.io/Rimtify/
-DOWNLOAD APK ANDROID: https://median.co/share/nmjnmkq#apk
+RIMTIFY is a full-stack faculty management system designed to simplify academic workflows inside universities. It allows teachers to manage attendance, student records, study materials, and notes in one centralized platform.
 
-____________________________
-#Features
-- Faculty Authentication (Login/Register)
-- Attendance Management System
-- Upload & Manage Study Materials
-- Create and Save Notes
-- Course-wise Student Data Management
-- File Storage for Faculty Uploads
-- Lightweight Local Database (SQLite)
+____________
 
-# Tech Stack
-### Backend
-- Node.js
-- Express.js
-- REST API Architecture
+🔗 Live App: https://preeti-kaur245.github.io/Rimtify/
 
-### Frontend
-- React (Vite)
-- HTML5
-- CSS3
-- JavaScript
+📱 Download Android APK: https://median.co/share/nmjnmkq#apk
+___________
 
-### Database
-- SQLite (Local Database)
+⚡ Features
+🔐 Authentication
+Faculty Login / Registration
+📊 Attendance Management
+Mark attendance per course
+Store attendance records
+View attendance history
+📅 Multi-Day Attendance Export
+Export attendance for last N days
+Fetch historical data from database
+Sorted by date
+📥 CSV Report Generation
+Proper comma-separated format
+UTF-8 with BOM (Excel compatible)
+Handles special characters and commas
+Clean column structure:
+Date, Student Name, Student ID, Course, Attendance Status
+📂 File Download
+Auto-download as: attendance_report.csv
+Works in Excel, Google Sheets, etc.
+📁 Study Materials
+Upload PDFs, images, and files
+Retrieve and manage uploaded content
+📝 Notes System
+Create and save notes for teaching
+🎓 Student Management
+Course-wise student records
+Add and manage student data
 
-# Project Structure
 
-```
+🛠 Tech Stack
+Backend
+Node.js
+Express.js
+REST API
+Frontend
+React (Vite)
+HTML5, CSS3, JavaScript
+Database
+SQLite (local database)
+Storage
+Local file system (/uploads)
+
+
+📁 Project Structure
 project-root/
 
 ├── backend/
-│   ├── auth.js        # Authentication APIs (login/register)
-│   ├── data.js        # Student & course data handling
-│   ├── materials.js   # Material upload & retrieval APIs
-│   └── server.js      # Main Express server
+│   ├── auth.js
+│   ├── data.js
+│   ├── materials.js
+│   └── server.js
 
 ├── frontend/
 │   ├── src/
 │   ├── index.html
 │   └── vite.config.js
 
-├── uploads/           # Stores uploaded faculty files
-
-├── rimtify.sqlite     # SQLite database file
-
+├── uploads/
+├── rimtify.sqlite
 └── README.md
-```
 
----
 
-## ⚙️ Installation & Setup
-
-### 1. Clone the Repository
-```bash
+⚙️ Installation & Setup
+1. Clone Repository
 git clone https://github.com/preeti-kaur245/Rimtify
 cd rimtify-project-rimt
-```
-
-### 2. Backend Setup
-```bash
+2. Backend Setup
 cd backend
 npm install
 node server.js
-```
-
-### 3. Frontend Setup
-```bash
+3. Frontend Setup
 cd frontend
 npm install
 npm run dev
-```
 
----
 
-## 🔐 API Overview
+🔌 API Overview
+Auth Routes
+POST /login → Login faculty
+POST /register → Register faculty
+Student & Attendance
+GET /students → Get students
+POST /students → Add student
+GET /attendance → Get attendance
+POST /attendance → Mark attendance
+Materials
+POST /upload → Upload file
+GET /materials → Get uploaded files
+💾 Database
+SQLite database (rimtify.sqlite)
+Stores:
+Faculty credentials
+Student records
+Attendance data
+Material metadata
 
-### Auth Routes (`auth.js`)
-- POST `/login` → Authenticate faculty
-- POST `/register` → Create new faculty account
 
-### Data Routes (`data.js`)
-- GET `/students` → Fetch student list
-- POST `/students` → Add new student
-- GET `/attendance` → View attendance
-- POST `/attendance` → Mark attendance
+🎯 Use Cases
+Replace manual attendance registers
+Manage student records digitally
+Store and share study materials
+Maintain organized academic data
 
-### Materials Routes (`materials.js`)
-- POST `/upload` → Upload files
-- GET `/materials` → Retrieve uploaded materials
 
----
+⚠️ Limitations
+Not scalable for production (SQLite + local storage)
+Basic authentication (no JWT)
+No role-based access control
+UI can be improved
 
-## 💾 Database
 
-- Uses SQLite for simplicity and local storage.
-- File: `rimtify.sqlite`
-- Stores:
-  - Faculty credentials
-  - Student records
-  - Attendance data
-  - Uploaded material metadata
+🔧 Future Improvements
+Add JWT authentication
+Use cloud database (PostgreSQL / Supabase)
+Integrate cloud storage (AWS S3 / Firebase)
+Add admin roles and dashboards
+Improve UI/UX
 
----
+👤 AUTHOR 
+Manpreet Kaur
+BCA AI/ML – RIMT University
 
-## 📌 Use Case
-
-- University faculty to reduce manual work
-- Easy digital record management
-- Organized course-wise student tracking
-- Centralized academic resource sharing
-
----
-
-## ⚠️ Limitations
-
-- Not scalable for production (SQLite + local uploads)
-- Basic authentication (no advanced security)
-- No role-based access control
-- UI may need improvements
-
----
-
-## 🔧 Future Improvements
-
-- Add JWT authentication
-- Use cloud storage (AWS S3 / Firebase)
-- Upgrade database (PostgreSQL / MongoDB)
-- Add admin roles
-- Improve UI/UX
-- Deploy the application
-
----
-## 📄 License
-This project is open-source and available under the MIT License.
-
-## 👤 Author
-Developed by MANPREET KAUR- BCA AI/ML (RIMT University)
-
+📄 License
+MIT License-2026 
