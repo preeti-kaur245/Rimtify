@@ -1,9 +1,10 @@
 import { useState, useRef } from 'react';
 import { api } from '../api';
+import { Icons } from '../Icons';
 import './UploadModal.css';
 
 const ACCEPT = '.pdf,.pptx,.ppt,.docx,.doc,.mp4,.mov,.xlsx,.xls,.txt,.png,.jpg,.jpeg';
-const FILE_ICONS = { pdf: '📕', pptx: '📙', docx: '📘', mp4: '🎬', other: '📄' };
+const FILE_ICONS = { pdf: <Icons.File />, pptx: <Icons.File />, docx: <Icons.File />, mp4: <Icons.Video />, other: <Icons.File /> };
 const getType = (ext) => {
   const m = { pdf: 'pdf', pptx: 'pptx', ppt: 'pptx', docx: 'docx', doc: 'docx', mp4: 'mp4', mov: 'mp4' };
   return m[ext.toLowerCase()] || 'other';
@@ -64,7 +65,7 @@ export default function UploadModal({ courses, onClose, onUploaded }) {
     <div className="overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className="modal upload-modal">
         <div className="modal-handle" />
-        <h2 className="modal-title">📤 Upload Material</h2>
+        <h2 className="modal-title"><Icons.Upload size={18} /> Upload Material</h2>
 
         {/* Drop Zone */}
         <div
@@ -86,11 +87,11 @@ export default function UploadModal({ courses, onClose, onUploaded }) {
                 <div className="drop-file-name">{file.name}</div>
                 <div className="drop-file-size">{fmtSize(file.size)}</div>
               </div>
-              <button className="btn btn-ghost btn-sm" onClick={(e) => { e.stopPropagation(); setFile(null); setTitle(''); }}>✕ Clear</button>
+              <button className="btn btn-ghost btn-sm" onClick={(e) => { e.stopPropagation(); setFile(null); setTitle(''); }}><Icons.X size={14} /> Clear</button>
             </div>
           ) : (
             <div className="drop-placeholder">
-              <div style={{ fontSize: 36, marginBottom: 10 }}>📂</div>
+              <div style={{ marginBottom: 10, color: 'var(--blue2)' }}><Icons.Book size={36} /></div>
               <div style={{ fontWeight: 700, marginBottom: 4 }}>Tap to select file</div>
               <div style={{ fontSize: 12, color: 'var(--text3)' }}>or drag & drop here</div>
               <div style={{ fontSize: 11, color: 'var(--text3)', marginTop: 6 }}>PDF, PPTX, DOCX, MP4, Images · Max 100 MB</div>
@@ -132,7 +133,7 @@ export default function UploadModal({ courses, onClose, onUploaded }) {
             className={`btn btn-primary ${!file || uploading ? 'btn-loading' : ''}`}
             onClick={handleUpload} disabled={!file || uploading}
           >
-            {uploading ? <><span className="spinner" /> Uploading...</> : '📤 Upload File'}
+            {uploading ? <><span className="spinner" /> Uploading...</> : <><Icons.Upload size={16} /> Upload File</>}
           </button>
         </div>
       </div>

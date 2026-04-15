@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '../api';
 import { useToast } from '../ToastContext';
+import { Icons } from '../Icons';
 import './NotesScreen.css';
 
 const TAGS = ['General', 'Admin', 'Personal', 'Research', 'Meeting'];
@@ -11,7 +12,7 @@ function NoteModal({ note, onClose, onSave }) {
     <div className="overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className="modal">
         <div className="modal-handle" />
-        <h2 className="modal-title">{note?.id ? '✏️ Edit Note' : '✍️ New Note'}</h2>
+        <h2 className="modal-title">{note?.id ? <><Icons.Edit size={18} /> Edit Note</> : <><Icons.Note size={18} /> New Note</>}</h2>
         <div className="input-wrap">
           <label className="input-label">Title *</label>
           <input className="input" placeholder="Note title" value={form.title} onChange={e => setForm(p => ({...p,title:e.target.value}))} />
@@ -28,7 +29,7 @@ function NoteModal({ note, onClose, onSave }) {
         </div>
         <div className="modal-actions">
           <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
-          <button className="btn btn-primary" onClick={() => onSave(form)}>{note?.id ? '💾 Save' : '📝 Save Note'}</button>
+          <button className="btn btn-primary" onClick={() => onSave(form)}>{note?.id ? <><Icons.Save size={16} /> Save</> : <><Icons.Tick size={16} /> Save Note</>}</button>
         </div>
       </div>
     </div>
@@ -46,22 +47,22 @@ export default function NotesScreen() {
 
   const load = async () => {
     try { const n = await api.get('/notes'); setNotes(n); }
-    catch (e) { toast('❌ ' + e.message, 'error'); }
+    catch (e) { toast('Error: ' + e.message, 'error'); }
     finally { setLoading(false); }
   };
   useEffect(() => { load(); }, []);
 
   const saveNote = async (form) => {
-    if (!form.title.trim()) { toast('❗ Title required', 'error'); return; }
+    if (!form.title.trim()) { toast('Title required', 'error'); return; }
     try {
       if (editNote?.id) {
         await api.put(`/notes/${editNote.id}`, form);
         setNotes(prev => prev.map(n => n.id === editNote.id ? { ...n, ...form } : n));
-        toast('✅ Note updated!', 'success');
+        toast('Note updated!', 'success');
       } else {
         const n = await api.post('/notes', form);
         setNotes(prev => [n, ...prev]);
-        toast('📝 Note saved!', 'success');
+        toast('Note saved!', 'success');
       }
       setEditNote(null); setShowAdd(false);
     } catch (e) { toast('❌ ' + e.message, 'error'); }
@@ -72,7 +73,7 @@ export default function NotesScreen() {
     try {
       await api.del(`/notes/${id}`);
       setNotes(prev => prev.filter(n => n.id !== id));
-      toast('🗑️ Note deleted', 'success');
+      toast('Note deleted', 'success');
     } catch (e) { toast('❌ ' + e.message, 'error'); }
   };
 
@@ -98,11 +99,11 @@ export default function NotesScreen() {
           <h1>My Notes</h1>
           <p>{notes.length} note{notes.length !== 1 ? 's' : ''}</p>
         </div>
-        <button className="btn btn-primary btn-sm" onClick={() => setShowAdd(true)}>✍️ New Note</button>
+        <button className="btn btn-primary btn-sm" onClick={() => setShowAdd(true)}><Icons.Plus size={16} /> New Note</button>
       </div>
 
       <div className="search-bar" style={{ marginBottom: 12 }}>
-        <span>🔍</span>
+        <span><Icons.Search size={16} /></span>
         <input className="search-input" placeholder="Search notes..." value={search} onChange={e => setSearch(e.target.value)} />
       </div>
 
@@ -116,20 +117,20 @@ export default function NotesScreen() {
         <div className="stagger">{[1,2,3].map(i => <div key={i} className="skeleton" style={{ height: 100, borderRadius: 14, marginBottom: 10 }} />)}</div>
       ) : filtered.length === 0 ? (
         <div className="empty-state">
-          <div style={{ fontSize: 52 }}>📝</div>
+          <div style={{ marginBottom: 12, color: 'var(--blue2)' }}><Icons.Note size={52} /></div>
           <h3>{search ? 'No matching notes' : 'No notes yet'}</h3>
           <p>{search ? 'Try a different search.' : 'Capture ideas, reminders, and meeting notes.'}</p>
-          {!search && <button className="btn btn-primary mt-16" onClick={() => setShowAdd(true)}>✍️ Create First Note</button>}
+          {!search && <button className="btn btn-primary mt-16" onClick={() => setShowAdd(true)}><Icons.Plus size={18} /> Create First Note</button>}
         </div>
       ) : (
         <div className="notes-grid stagger">
           {filtered.map(n => (
             <div key={n.id} className="note-card" onClick={() => setEditNote(n)}>
               <div className="note-card-header">
-                <div className="note-title">{n.pinned ? '📌 ' : ''}{n.title}</div>
+                <div className="note-title">{n.pinned ? <Icons.Pin size={14} color="var(--blue2)" /> : ''}{n.title}</div>
                 <div style={{ display: 'flex', gap: 5 }}>
-                  <button className="btn btn-icon btn-sm" style={{ fontSize: 14 }} onClick={e => { e.stopPropagation(); togglePin(n); }} title={n.pinned ? 'Unpin' : 'Pin'}>📌</button>
-                  <button className="btn btn-icon btn-sm" style={{ color: 'var(--red)', fontSize: 14 }} onClick={e => { e.stopPropagation(); deleteNote(n.id); }}>🗑️</button>
+                  <button className="btn btn-icon btn-sm" style={{ fontSize: 14 }} onClick={e => { e.stopPropagation(); togglePin(n); }} title={n.pinned ? 'Unpin' : 'Pin'}><Icons.Pin size={14} /></button>
+                  <button className="btn btn-icon btn-sm" style={{ color: 'var(--red)', fontSize: 14 }} onClick={e => { e.stopPropagation(); deleteNote(n.id); }}><Icons.Delete size={14} /></button>
                 </div>
               </div>
               <div className="note-body">{n.body || 'No content'}</div>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../AuthContext';
 import { api } from '../api';
+import { Icons } from '../Icons';
 import './DashboardScreen.css';
 
 const StatCard = ({ icon, value, label, color }) => (
@@ -51,12 +52,12 @@ export default function DashboardScreen({ onNav }) {
       {/* ── HERO ── */}
       <div className="dash-hero fade-up">
         <div className="dash-hero-text">
-          <div className="dash-greet">{greet} 👋</div>
+          <div className="dash-greet">{greet} <Icons.Tick size={24} color="var(--amber)" /></div>
           <h1 className="dash-name">{teacher?.name || 'Faculty'}</h1>
           <div className="dash-role">
-            <span>📚</span> {teacher?.role || 'Faculty'} · {teacher?.dept || 'Department'} · {teacher?.univ || 'University'}
+            <span><Icons.Book size={14} /></span> {teacher?.role || 'Faculty'} · {teacher?.dept || 'Department'} · {teacher?.univ || 'University'}
           </div>
-          <div className="dash-date">📅 {today}</div>
+          <div className="dash-date"><Icons.Date size={14} /> {today}</div>
         </div>
         <div className="dash-hero-badge">
           <div className="dash-initials">{teacher?.initials || '?'}</div>
@@ -65,10 +66,10 @@ export default function DashboardScreen({ onNav }) {
 
       {/* ── STATS ── */}
       <div className="stats-grid stagger">
-        <StatCard icon="📚" value={loading ? '–' : stats.courses} label="Courses" color="var(--blue)" />
-        <StatCard icon="👥" value={loading ? '–' : stats.students} label="Students" color="var(--cyan)" />
-        <StatCard icon="✅" value={loading ? '–' : stats.lectures} label="Lectures" color="var(--purple)" />
-        <StatCard icon="📝" value={loading ? '–' : stats.notes} label="Notes" color="var(--green)" />
+        <StatCard icon={<Icons.Book />} value={loading ? '–' : stats.courses} label="Courses" color="var(--blue)" />
+        <StatCard icon={<Icons.Students />} value={loading ? '–' : stats.students} label="Students" color="var(--cyan)" />
+        <StatCard icon={<Icons.Tick />} value={loading ? '–' : stats.lectures} label="Lectures" color="var(--purple)" />
+        <StatCard icon={<Icons.Note />} value={loading ? '–' : stats.notes} label="Notes" color="var(--green)" />
       </div>
 
       {/* ── QUICK ACTIONS ── */}
@@ -76,10 +77,10 @@ export default function DashboardScreen({ onNav }) {
         <h2 className="section-title">Quick Actions</h2>
       </div>
       <div className="qa-grid stagger">
-        <QuickAction icon="✅" label="Mark Attendance" color="#1a6fff" onClick={() => onNav('courses')} />
-        <QuickAction icon="📤" label="Upload Material" color="#00d4ff" onClick={() => onNav('materials')} />
-        <QuickAction icon="✍️" label="New Note" color="#7c3aed" onClick={() => onNav('notes')} />
-        <QuickAction icon="📚" label="Add Course" color="#10b981" onClick={() => onNav('courses')} />
+        <QuickAction icon={<Icons.Tick />} label="Mark Attendance" color="#1a6fff" onClick={() => onNav('courses')} />
+        <QuickAction icon={<Icons.Upload />} label="Upload Material" color="#00d4ff" onClick={() => onNav('materials')} />
+        <QuickAction icon={<Icons.Plus />} label="New Note" color="#7c3aed" onClick={() => onNav('notes')} />
+        <QuickAction icon={<Icons.Book />} label="Add Course" color="#10b981" onClick={() => onNav('courses')} />
       </div>
 
       {/* ── RECENT MATERIALS ── */}
@@ -87,7 +88,7 @@ export default function DashboardScreen({ onNav }) {
         <div className="mt-16">
           <div className="section-header">
             <h2 className="section-title">Recent Materials</h2>
-            <button className="section-link" onClick={() => onNav('materials')}>View All →</button>
+            <button className="section-link" onClick={() => onNav('materials')}>View All <Icons.ChevronRight size={14} /></button>
           </div>
           <div className="recent-mats stagger">
             {recentMats.map(m => (
@@ -109,10 +110,10 @@ export default function DashboardScreen({ onNav }) {
       {/* ── EMPTY STATE ── */}
       {!loading && stats.courses === 0 && (
         <div className="dash-empty fade-up">
-          <div style={{ fontSize: 52, marginBottom: 12 }}>🚀</div>
+          <div style={{ marginBottom: 12, color: 'var(--blue)' }}><Icons.Book size={52} /></div>
           <h3 style={{ marginBottom: 6 }}>Start by adding your first course</h3>
           <p>All your data is 100% private and stored securely just for you.</p>
-          <button className="btn btn-primary mt-16" onClick={() => onNav('courses')}>📚 Add First Course</button>
+          <button className="btn btn-primary mt-16" onClick={() => onNav('courses')}><Icons.Book size={18} /> Add First Course</button>
         </div>
       )}
     </div>

@@ -1,7 +1,8 @@
 import { api } from '../api';
+import { Icons } from '../Icons';
 import './MaterialCard.css';
 
-const FILE_ICONS = { pdf: '📕', pptx: '📙', docx: '📘', mp4: '🎬', other: '📄' };
+const FILE_ICONS = { pdf: <Icons.File />, pptx: <Icons.File />, docx: <Icons.File />, mp4: <Icons.Video />, other: <Icons.File /> };
 const FILE_COLORS = {
   pdf: 'rgba(239,68,68,.15)',
   pptx: 'rgba(245,158,11,.15)',
@@ -35,12 +36,12 @@ export default function MaterialCard({ material: m, onDelete }) {
           <span>·</span>
           <span>{fmtDate(m.created_at)}</span>
           <span>·</span>
-          <span>{m.views || 0} views</span>
+          <span><Icons.Eye size={14} /> {m.views || 0}</span>
         </div>
       </div>
       <div className="mat-card-actions">
-        <button className="btn btn-icon btn-sm" onClick={handleDownload} title="Download">⬇️</button>
-        <button className="btn btn-icon btn-sm" style={{ color: 'var(--red)' }} onClick={() => onDelete(m.id)} title="Delete">🗑️</button>
+        <button className="btn btn-icon btn-sm" onClick={handleDownload} title="Download"><Icons.Download size={16} /></button>
+        <button className="btn btn-icon btn-sm" style={{ color: 'var(--red)' }} onClick={() => onDelete(m.id)} title="Delete"><Icons.Delete size={16} /></button>
       </div>
     </div>
   );

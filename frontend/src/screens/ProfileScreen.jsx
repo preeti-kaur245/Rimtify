@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../AuthContext';
 import { useToast } from '../ToastContext';
 import { api } from '../api';
+import { Icons } from '../Icons';
 import './ProfileScreen.css';
 
 const DEPT_OPTIONS = ['Computer Science & Engineering', 'Electronics & Communication', 'Mechanical Engineering', 'Civil Engineering', 'Mathematics', 'Physics', 'Chemistry', 'Commerce', 'Management', 'Law', 'Other'];
@@ -28,9 +29,9 @@ export default function ProfileScreen() {
     try {
       await updateProfile(form);
       setEditing(false);
-      toast('✅ Profile updated!', 'success');
+      toast('Profile updated!', 'success');
     } catch (e) {
-      toast('❌ ' + e.message, 'error');
+      toast('Error: ' + e.message, 'error');
     }
   };
 
@@ -49,10 +50,10 @@ export default function ProfileScreen() {
       {/* ── STATS ── */}
       <div className="prof-stats-row stagger">
         {[
-          { icon: '📚', val: stats.courses, lbl: 'Courses' },
-          { icon: '👥', val: stats.students, lbl: 'Students' },
-          { icon: '✅', val: stats.lectures, lbl: 'Lectures' },
-          { icon: '📁', val: stats.materials, lbl: 'Materials' },
+          { icon: <Icons.Book color="var(--blue2)" />, val: stats.courses, lbl: 'Courses' },
+          { icon: <Icons.Students color="var(--cyan)" />, val: stats.students, lbl: 'Students' },
+          { icon: <Icons.Tick color="var(--green)" />, val: stats.lectures, lbl: 'Lectures' },
+          { icon: <Icons.Upload color="var(--amber)" />, val: stats.materials, lbl: 'Materials' },
         ].map(s => (
           <div key={s.lbl} className="prof-stat">
             <div className="pstat-icon">{s.icon}</div>
@@ -67,7 +68,7 @@ export default function ProfileScreen() {
         <div className="profile-details card stagger">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <h3>Account Details</h3>
-            <button className="btn btn-secondary btn-sm" onClick={() => setEditing(true)}>✏️ Edit Profile</button>
+            <button className="btn btn-secondary btn-sm" onClick={() => setEditing(true)}><Icons.Edit size={14} /> Edit Profile</button>
           </div>
           <div className="prof-detail-row">
             <div className="pdr-label">Full Name</div>
@@ -92,7 +93,7 @@ export default function ProfileScreen() {
         </div>
       ) : (
         <div className="profile-details card fade-in">
-          <h3 style={{ marginBottom: 18 }}>✏️ Edit Profile</h3>
+          <h3 style={{ marginBottom: 18 }}><Icons.Edit size={18} /> Edit Profile</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             <div className="input-wrap" style={{ gridColumn: '1 / -1' }}>
               <label className="input-label">Full Name</label>
@@ -121,14 +122,14 @@ export default function ProfileScreen() {
           </div>
           <div style={{ display: 'flex', gap: 10, marginTop: 6 }}>
             <button className="btn btn-secondary" onClick={() => setEditing(false)}>Cancel</button>
-            <button className="btn btn-primary" style={{ flex: 1 }} onClick={handleSave}>💾 Save Changes</button>
+            <button className="btn btn-primary" style={{ flex: 1 }} onClick={handleSave}><Icons.Save size={18} /> Save Changes</button>
           </div>
         </div>
       )}
 
       {/* ── SIGN OUT ── */}
       <button className="btn btn-danger btn-full mt-16" onClick={() => { if (confirm('Sign out of Faculty Portal?')) logout(); }}>
-        🚪 Sign Out
+        <Icons.Logout size={18} /> Sign Out
       </button>
 
       <div style={{ textAlign: 'center', fontSize: 11, color: 'var(--text3)', marginTop: 24, paddingBottom: 8 }}>

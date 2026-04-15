@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useAuth } from '../AuthContext';
+import { Icons } from '../Icons';
 import './Navbar.css';
 
 const NavItems = [
-  { key: 'dashboard', icon: '🏠', label: 'Dashboard' },
-  { key: 'courses', icon: '📚', label: 'Courses' },
-  { key: 'materials', icon: '📁', label: 'Materials' },
-  { key: 'notes', icon: '📝', label: 'Notes' },
-  { key: 'profile', icon: '👤', label: 'Profile' },
+  { key: 'dashboard', icon: <Icons.Home size={18} />, label: 'Dashboard' },
+  { key: 'courses', icon: <Icons.Book size={18} />, label: 'Courses' },
+  { key: 'materials', icon: <Icons.Upload size={18} />, label: 'Materials' },
+  { key: 'notes', icon: <Icons.Note size={18} />, label: 'Notes' },
+  { key: 'profile', icon: <Icons.User size={18} />, label: 'Profile' },
 ];
 
 const RimtifyLogo = () => (
@@ -72,14 +73,14 @@ export default function Navbar({ active, onNav }) {
               <div className="sidebar-user-role">{teacher?.role || 'Faculty'}</div>
             </div>
           </div>
-          <button className="sidebar-logout" onClick={logout} title="Sign out">🚪</button>
+          <button className="sidebar-logout" onClick={logout} title="Sign out"><Icons.Logout size={18} /></button>
         </div>
       </aside>
 
       {/* ── MOBILE TOP HEADER ── */}
       <header className="mobile-header hide-desktop">
         <div className="mh-left">
-          <button className="mh-hamburger" onClick={() => setMobileOpen(true)}>☰</button>
+          <button className="mh-hamburger" onClick={() => setMobileOpen(true)}><Icons.Menu /></button>
           <div className="mh-brand">
             <RimtifyLogo />
             <span className="mh-name">Rimtify</span>
@@ -100,7 +101,7 @@ export default function Navbar({ active, onNav }) {
                   <div style={{ fontSize: 11, color: 'var(--text3)' }}>{teacher?.dept}</div>
                 </div>
               </div>
-              <button className="mdr-close" onClick={() => setMobileOpen(false)}>✕</button>
+              <button className="mdr-close" onClick={() => setMobileOpen(false)}><Icons.X /></button>
             </div>
             <nav className="mdr-nav">
               {NavItems.map(item => (
@@ -110,7 +111,7 @@ export default function Navbar({ active, onNav }) {
               ))}
             </nav>
             <button className="mdr-logout" onClick={() => { setMobileOpen(false); logout(); }}>
-              🚪 Sign Out
+              <Icons.Logout size={18} /> Sign Out
             </button>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '../api';
 import { useToast } from '../ToastContext';
+import { Icons } from '../Icons';
 import './CoursesScreen.css';
 
 const ICONS = ['📘', '💻', '🔬', '🧮', '⚡', '🎨', '📖', '🧪', '📡', '🏗️'];
@@ -12,7 +13,7 @@ function CourseModal({ course, onClose, onSave }) {
     <div className="overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className="modal">
         <div className="modal-handle" />
-        <h2 className="modal-title">{course?.id ? '✏️ Edit Course' : '📚 Add New Course'}</h2>
+        <h2 className="modal-title">{course?.id ? <><Icons.Edit size={18} /> Edit Course</> : <><Icons.Book size={18} /> Add New Course</>}</h2>
         <div className="input-wrap">
           <label className="input-label">Course Name *</label>
           <input className="input" placeholder="e.g. Data Structures & Algorithms" value={form.name} onChange={e => set('name', e.target.value)} />
@@ -42,7 +43,7 @@ function CourseModal({ course, onClose, onSave }) {
         <div className="modal-actions">
           <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
           <button className="btn btn-primary" onClick={() => onSave(form)}>
-            {course?.id ? '💾 Save Changes' : '✅ Create Course'}
+            {course?.id ? <><Icons.Save size={16} /> Save Changes</> : <><Icons.Tick size={16} /> Create Course</>}
           </button>
         </div>
       </div>
@@ -56,7 +57,7 @@ function StudentModal({ student, onClose, onSave }) {
     <div className="overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className="modal">
         <div className="modal-handle" />
-        <h2 className="modal-title">{student?.id ? '✏️ Edit Student' : '👤 Add Student'}</h2>
+        <h2 className="modal-title">{student?.id ? <><Icons.Edit size={18} /> Edit Student</> : <><Icons.User size={18} /> Add Student</>}</h2>
         <div className="input-wrap">
           <label className="input-label">Full Name *</label>
           <input className="input" placeholder="Student full name" value={form.name} onChange={e => setForm(p => ({...p,name:e.target.value}))} />
@@ -71,7 +72,7 @@ function StudentModal({ student, onClose, onSave }) {
         </div>
         <div className="modal-actions">
           <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
-          <button className="btn btn-primary" onClick={() => onSave(form)}>{student?.id ? '💾 Save' : '👤 Add Student'}</button>
+          <button className="btn btn-primary" onClick={() => onSave(form)}>{student?.id ? <><Icons.Save size={16} /> Save</> : <><Icons.User size={16} /> Add Student</>}</button>
         </div>
       </div>
     </div>
@@ -100,7 +101,7 @@ export default function CoursesScreen() {
 
   const loadCourses = async () => {
     try { const c = await api.get('/courses'); setCourses(c); }
-    catch (e) { toast('❌ ' + e.message, 'error'); }
+    catch (e) { toast('Error: ' + e.message, 'error'); }
     finally { setLoading(false); }
   };
   useEffect(() => { loadCourses(); }, []);
@@ -174,11 +175,11 @@ export default function CoursesScreen() {
         await api.put(`/courses/${editCourse.id}`, form);
         setCourses(prev => prev.map(c => c.id === editCourse.id ? { ...c, ...form } : c));
         if (openCourse?.id === editCourse.id) setOpenCourse(p => ({ ...p, ...form }));
-        toast('✅ Course updated!', 'success');
+        toast('Course updated!', 'success');
       } else {
         const c = await api.post('/courses', form);
         setCourses(prev => [c, ...prev]);
-        toast('📚 Course created!', 'success');
+        toast('Course created!', 'success');
       }
       setEditCourse(null); setShowAddCourse(false);
     } catch (e) { toast('❌ ' + e.message, 'error'); }
@@ -192,9 +193,9 @@ export default function CoursesScreen() {
       setCourses(prev => prev.filter(c => c.id !== id));
       setOpenCourse(null);
       setShowConfirmDelete(false);
-      toast('🗑️ Course deleted successfully', 'success');
+      toast('Course deleted successfully', 'success');
     } catch (err) {
-      toast('❌ Error deleting course', 'error');
+      toast('Error deleting course', 'error');
       console.error(err);
     }
   };
@@ -205,12 +206,12 @@ export default function CoursesScreen() {
       if (editStudent?.id) {
         await api.put(`/students/${editStudent.id}`, form);
         setStudents(prev => prev.map(s => s.id === editStudent.id ? { ...s, ...form } : s));
-        toast('✅ Student updated!', 'success');
+        toast('Student updated!', 'success');
       } else {
         const s = await api.post(`/courses/${openCourse.id}/students`, form);
         setStudents(prev => [...prev, s]);
         setAttSession(prev => ({ ...prev, [s.id]: 'none' }));
-        toast('👤 Student added!', 'success');
+        toast('Student added!', 'success');
       }
       setEditStudent(null); setShowAddStudent(false);
     } catch (e) { toast('❌ ' + e.message, 'error'); }
@@ -220,7 +221,7 @@ export default function CoursesScreen() {
     try {
       await api.del(`/students/${id}`);
       setStudents(prev => prev.filter(s => s.id !== id));
-      toast('🗑️ Student removed', 'success');
+      toast('Student removed', 'success');
     } catch (e) { toast('❌ ' + e.message, 'error'); }
   };
 
@@ -274,7 +275,7 @@ export default function CoursesScreen() {
 
       setLecNotes(prev => ({ ...prev, [`${selectedDate}-${currentLec}`]: attNote }));
       
-      toast(`💾 Saved: ${displayDate(selectedDate)} - L${currentLec}`, 'success');
+      toast(`Saved: ${displayDate(selectedDate)} - L${currentLec}`, 'success');
       
       // Auto-advance lecture only if it's today and we are marking new ones
       const today = formatDate(new Date());
@@ -339,7 +340,7 @@ export default function CoursesScreen() {
       window.URL.revokeObjectURL(url);
     }, 200);
     
-    toast('📊 Attendance Report Downloaded', 'success');
+    toast('Attendance Report Downloaded', 'success');
   };
 
   const filteredStudents = students.filter(s => 
@@ -360,17 +361,17 @@ export default function CoursesScreen() {
               <h1>My Courses</h1>
               <p>{courses.length} course{courses.length !== 1 ? 's' : ''}</p>
             </div>
-            <button className="btn btn-primary btn-sm" onClick={() => setShowAddCourse(true)}>+ Add Course</button>
+            <button className="btn btn-primary btn-sm" onClick={() => setShowAddCourse(true)}><Icons.Plus size={16} /> Add Course</button>
           </div>
 
           {loading ? (
             <div className="stagger">{[1,2].map(i => <div key={i} className="skeleton" style={{ height: 120, borderRadius: 16, marginBottom: 12 }} />)}</div>
           ) : courses.length === 0 ? (
             <div className="empty-state">
-              <div style={{ fontSize: 52 }}>📚</div>
+              <div style={{ marginBottom: 12, color: 'var(--blue)' }}><Icons.Book size={52} /></div>
               <h3>No courses yet</h3>
               <p>Add your first course to start managing attendance.</p>
-              <button className="btn btn-primary mt-16" onClick={() => setShowAddCourse(true)}>📚 Add First Course</button>
+              <button className="btn btn-primary mt-16" onClick={() => setShowAddCourse(true)}><Icons.Book size={18} /> Add First Course</button>
             </div>
           ) : (
             <div className="courses-list stagger">
@@ -382,7 +383,7 @@ export default function CoursesScreen() {
                       <div className="cc-name">{c.name}</div>
                       <div className="cc-sub">{c.code}{c.semester ? ' · ' + c.semester : ''}{c.room ? ' · ' + c.room : ''}</div>
                     </div>
-                    <button className="btn btn-icon btn-sm" onClick={e => { e.stopPropagation(); setEditCourse(c); }} title="Edit">✏️</button>
+                    <button className="btn btn-icon btn-sm" onClick={e => { e.stopPropagation(); setEditCourse(c); }} title="Edit"><Icons.Edit size={16} /></button>
                   </div>
                 </div>
               ))}
@@ -393,25 +394,25 @@ export default function CoursesScreen() {
         /* ── COURSE DETAIL ── */
         <div>
           <div className="course-detail-header">
-            <button className="btn btn-icon" onClick={() => setOpenCourse(null)}>←</button>
+            <button className="btn btn-icon" onClick={() => setOpenCourse(null)}><Icons.Back /></button>
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 17, fontWeight: 800 }}>{openCourse.icon} {openCourse.name}</div>
               <div style={{ fontSize: 11, color: 'var(--text3)' }}>{openCourse.code}{openCourse.semester ? ' · ' + openCourse.semester : ''}</div>
             </div>
-            <button className="btn btn-icon btn-sm" onClick={() => setEditCourse(openCourse)}>✏️</button>
+            <button className="btn btn-icon btn-sm" onClick={() => setEditCourse(openCourse)}><Icons.Edit size={16} /></button>
             <button 
               className="btn btn-sm btn-outline-red" 
               onClick={(e) => { e.stopPropagation(); setShowConfirmDelete(true); }}
               title="Delete Course"
             >
-              🗑️
+              <Icons.Delete size={16} />
             </button>
           </div>
 
           {showConfirmDelete && (
             <div className="overlay" style={{ zIndex: 3000 }} onClick={() => setShowConfirmDelete(false)}>
               <div className="modal" style={{ maxWidth: 320, textAlign: 'center' }} onClick={e => e.stopPropagation()}>
-                 <div style={{ fontSize: 48, marginBottom: 12 }}>🗑️</div>
+                 <div style={{ marginBottom: 12, color: 'var(--red)' }}><Icons.Delete size={48} /></div>
                  <h2 style={{ marginBottom: 8 }}>Delete Course?</h2>
                  <p style={{ fontSize: 13, color: 'var(--text2)', marginBottom: 20 }}>Are you sure you want to delete <b>{openCourse.name}</b>? This will permanently remove all students and attendance data.</p>
                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
@@ -427,18 +428,18 @@ export default function CoursesScreen() {
             <div className="course-tabs" style={{ marginBottom: 0, borderBottom: 'none' }}>
               {['students', 'attendance', 'history'].map(t => (
                 <button key={t} className={`course-tab ${activeTab === t ? 'active' : ''}`} onClick={() => setActiveTab(t)}>
-                  {t === 'students' ? '👥 Students' : t === 'attendance' ? '✅ Attendance' : '📊 History'}
+                  {t === 'students' ? <><Icons.Students size={16} /> Students</> : t === 'attendance' ? <><Icons.Attendance size={16} /> Attendance</> : <><Icons.History size={16} /> History</>}
                 </button>
               ))}
             </div>
             {activeTab === 'history' && (
-               <button className="btn btn-sm btn-secondary" style={{ marginRight: 4, height: 32, fontSize: 12, padding: '0 10px' }} onClick={exportCSV}>📥 Export CSV</button>
+               <button className="btn btn-sm btn-secondary" style={{ marginRight: 4, height: 32, fontSize: 12, padding: '0 10px' }} onClick={exportCSV}><Icons.Download size={14} /> Export CSV</button>
             )}
           </div>
 
           {(activeTab === 'students' || activeTab === 'attendance') && students.length > 0 && (
             <div className="search-bar" style={{ marginBottom: 16 }}>
-              <span>🔍</span>
+              <span><Icons.Search size={16} /></span>
               <input 
                 className="search-input" 
                 placeholder="Search student by name or roll no..." 
@@ -452,11 +453,11 @@ export default function CoursesScreen() {
           {activeTab === 'students' && (
             <div className="fade-in">
               <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
-                <button className="btn btn-primary btn-sm" onClick={() => setShowAddStudent(true)}>+ Add Student</button>
+                <button className="btn btn-primary btn-sm" onClick={() => setShowAddStudent(true)}><Icons.Plus size={16} /> Add Student</button>
               </div>
               {students.length === 0 ? (
                 <div className="empty-state" style={{ padding: '36px 0' }}>
-                  <div style={{ fontSize: 40 }}>👥</div>
+                  <div style={{ marginBottom: 12, color: 'var(--blue)' }}><Icons.Students size={40} /></div>
                   <h3>No students yet</h3>
                   <p>Add students to start marking attendance.</p>
                 </div>
@@ -474,8 +475,8 @@ export default function CoursesScreen() {
                         <div className="stu-roll">{s.roll || 'No roll no.'}{s.email ? ' · ' + s.email : ''}</div>
                       </div>
                       <div style={{ display: 'flex', gap: 6 }}>
-                        <button className="btn btn-icon btn-sm" onClick={() => setEditStudent(s)}>✏️</button>
-                        <button className="btn btn-icon btn-sm" style={{ color: 'var(--red)' }} onClick={() => deleteStudent(s.id)}>🗑️</button>
+                        <button className="btn btn-icon btn-sm" onClick={() => setEditStudent(s)}><Icons.Edit size={16} /></button>
+                        <button className="btn btn-icon btn-sm" style={{ color: 'var(--red)' }} onClick={() => deleteStudent(s.id)}><Icons.Delete size={16} /></button>
                       </div>
                     </div>
                   ))}
@@ -489,7 +490,7 @@ export default function CoursesScreen() {
             <div className="fade-in">
               <div className="att-controls">
                 <div className="date-picker-wrap">
-                  <label>📅 Date</label>
+                  <label><Icons.Date size={12} /> Date</label>
                   <input 
                     type="date" 
                     className="date-input" 
@@ -504,7 +505,7 @@ export default function CoursesScreen() {
               </div>
 
               <div className="att-note-box">
-                <span>📋</span>
+                <span><Icons.Note size={18} color="var(--amber)" /></span>
                 <textarea className="att-note-input" placeholder="Lecture note / topic covered..." value={attNote} onChange={e => setAttNote(e.target.value)} rows={2} />
               </div>
 
@@ -527,7 +528,7 @@ export default function CoursesScreen() {
                 {nCnt > 0 && <div className="att-chip att-n"><div className="att-num">{nCnt}</div><div className="att-lbl">Unmarked</div></div>}
               </div>
 
-              <div className="tap-hint">👆 Tap row to toggle status: Present → Absent → Unmark</div>
+              <div className="tap-hint">Tap row to toggle status: Present / Absent / Unmark</div>
 
               {students.length === 0 ? (
                 <div className="empty-state" style={{ padding: '30px 0' }}><p>Add students first from the Students tab.</p></div>
@@ -544,7 +545,7 @@ export default function CoursesScreen() {
                           <div className="stu-name">{s.name}</div>
                           <div className="stu-roll">{s.roll || '—'}</div>
                         </div>
-                        <div className={`att-badge ${st}`}>{st === 'P' ? '✓ Present' : st === 'A' ? '✗ Absent' : '— Mark'}</div>
+                        <div className={`att-badge ${st}`}>{st === 'P' ? <><Icons.Tick size={12} /> Present</> : st === 'A' ? <><Icons.Cross size={12} /> Absent</> : <><Icons.User size={12} /> Mark</>}</div>
                       </div>
                     );
                   })}
@@ -552,7 +553,7 @@ export default function CoursesScreen() {
               )}
               {students.length > 0 && (
                 <button className="btn btn-primary" style={{ width: '100%', marginTop: 20, height: 48, fontSize: 16 }} onClick={saveAttendance}>
-                  💾 Save Attendance
+                  <Icons.Save size={18} /> Save Attendance
                 </button>
               )}
             </div>
@@ -563,7 +564,7 @@ export default function CoursesScreen() {
             <div className="fade-in">
               {Object.keys(attData).length === 0 ? (
                 <div className="empty-state" style={{ padding: '36px 0' }}>
-                  <div style={{ fontSize: 40 }}>📊</div>
+                  <div style={{ fontSize: 40 }}><Icons.Chart size={40} /></div>
                   <h3>No attendance records yet</h3>
                   <p>Attendance records will appear here after you save them.</p>
                 </div>
@@ -571,7 +572,7 @@ export default function CoursesScreen() {
                 <div className="history-list stagger">
                   {Object.keys(attData).sort((a,b) => new Date(b) - new Date(a)).map(date => (
                     <div key={date} className="history-date-group">
-                      <div className="history-date-label">📅 {displayDate(date)}</div>
+                      <div className="history-date-label"><Icons.Date size={14} /> {displayDate(date)}</div>
                       {Object.keys(attData[date]).sort((a,b) => a-b).map(lec => {
                         const rec = attData[date][lec];
                         const p = Object.values(rec).filter(v => v === 'P').length;
@@ -588,19 +589,19 @@ export default function CoursesScreen() {
                               setAttSession(sess);
                               setAttNote(lecNotes[`${date}-${lec}`] || '');
                               setActiveTab('attendance');
-                              toast(`✏️ Editing ${displayDate(date)} - L${lec}`, 'info');
+                              toast(`Editing ${displayDate(date)} - L${lec}`, 'info');
                             }}
                           >
                             <div className="h-left">
                               <div className="h-lec-badge">L{lec}</div>
                               <div className="h-stats">
-                                <span className="h-p">✓ {p}</span>
-                                <span className="h-a">✗ {a}</span>
+                                <span className="h-p"><Icons.Tick size={12} /> {p}</span>
+                                <span className="h-a"><Icons.Cross size={12} /> {a}</span>
                               </div>
                             </div>
                             <div className="h-right">
-                              {lecNotes[`${date}-${lec}`] && <div className="h-note-preview">📋 {lecNotes[`${date}-${lec}`]}</div>}
-                              <span className="h-edit-icon">✏️</span>
+                              {lecNotes[`${date}-${lec}`] && <div className="h-note-preview"><Icons.Note size={12} /> {lecNotes[`${date}-${lec}`]}</div>}
+                              <span className="h-edit-icon"><Icons.Edit size={14} /></span>
                             </div>
                           </div>
                         );
