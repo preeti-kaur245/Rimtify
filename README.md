@@ -4,7 +4,7 @@ RIMTIFY is a full-stack faculty productivity system designed to simplify academi
 
 🔗 Live App: https://preeti-kaur245.github.io/Rimtify/
 
-📱 Download Android APK: https://median.co/share/nmjnmkq#apk
+📱 Download Android APK: https://median.co/share/xlzxykb#apk
 
 ⚡ Features
 🔐 Authentication (Supabase)
